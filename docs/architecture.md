@@ -2,7 +2,9 @@
 
 Wanna Watch is a single-user FastAPI app with a plain HTML/CSS/JavaScript frontend
 and SQLite storage. Films and whole TV series have separate browser lists.
-Episode tracking, accounts, public hosting, and native iOS packaging are not implemented.
+Railway hosting uses one process and a persistent volume. Optional HTTP Basic
+authentication protects all routes except `/healthz`; Railway requires a password.
+Episode tracking, separate user accounts, and native iOS packaging are not implemented.
 
 ## Catalog collection
 

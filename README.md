@@ -51,14 +51,16 @@ uv run wanna-watch --host 0.0.0.0
 
 Visit `http://YOUR_MAC_LAN_IP:8000` in Safari. You can add that page to your Home
 Screen from Safari's Share menu. Your Mac and the server must stay running.
-This is a single-user LAN app with no authentication; do not expose its port to
-the public internet. Native iOS packaging and cloud hosting are not implemented.
+Local use has no login unless `WANNA_WATCH_PASSWORD` is set. For cloud hosting,
+follow the [Railway deployment guide](docs/deployment.md); Railway startup requires
+a password. Native iOS packaging is not implemented.
 
 ## Documentation
 
 - [Usage and filters](docs/usage.md)
 - [Architecture and data sources](docs/architecture.md)
 - [Testing and live verification](docs/testing.md)
+- [Railway deployment preparation](docs/deployment.md)
 - [Changelog](docs/CHANGELOG.md)
 
 ## Development checks

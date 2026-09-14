@@ -15,6 +15,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+from wanna_watch.auth import install_auth
 from wanna_watch.catalog import refresh_catalog
 from wanna_watch.storage import Store
 from wanna_watch.tmdb import TMDB, SourceError
@@ -62,6 +63,9 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     Returns:
         Configured FastAPI application.
     """
+    password = os.getenv("WANNA_WATCH_PASSWORD") or dotenv_values(".env").get("WANNA_WATCH_PASSWORD") or ""
+    if os.getenv("RAILWAY_ENVIRONMENT_ID") and not password:
+        raise RuntimeError("Set WANNA_WATCH_PASSWORD before starting on Railway.")
     directory = data_dir or Path(os.getenv("WANNA_WATCH_DATA_DIR", "data"))
     store = Store(directory / "wanna-watch.sqlite3")
     saved = store.get("preferences", {})
@@ -79,8 +83,14 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
             worker.join()
 
     app = FastAPI(title="Wanna Watch", lifespan=lifespan)
+    install_auth(app, password)
     app.state.store = store
     app.mount("/static", StaticFiles(directory=STATIC), name="static")
+
+    @app.get("/healthz", include_in_schema=False)
+    def health() -> dict:
+        """Return readiness without revealing personal catalog or settings."""
+        return {"status": "ok"}
 
     @app.get("/", include_in_schema=False)
     def index() -> FileResponse:

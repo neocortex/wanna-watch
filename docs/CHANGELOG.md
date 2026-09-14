@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Protect hosted access with a shared password, reject cross-site writes, require
+  credentials on Railway, and expose a minimal public healthcheck.
+
+- Add a production Docker image and Railway setup instructions with persistent
+  storage and a build context that excludes credentials and personal data.
+
 - Redesign the catalog as an 80s neon video store with pink/cyan lettering,
   generated storefront artwork, self-hosted Barlow fonts, and framed real posters.
 - Compact the subscription and filter layout across desktop and mobile, preserve

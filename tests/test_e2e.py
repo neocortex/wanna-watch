@@ -46,6 +46,7 @@ def server(tmp_path: Path, request: pytest.FixtureRequest) -> Iterator[str]:
         sock.bind(("127.0.0.1", 0))
         port = sock.getsockname()[1]
     env = {**os.environ, "WANNA_WATCH_DATA_DIR": str(tmp_path), "TMDB_READ_TOKEN": ""}
+    env["WANNA_WATCH_PASSWORD"] = "browser-test-password" if request.node.name == "test_browser_password_login" else ""
     # Reason: an isolated working directory prevents accidental reads of personal .env credentials.
     process = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "wanna_watch.app:create_app", "--factory", "--port", str(port)],
@@ -60,7 +61,7 @@ def server(tmp_path: Path, request: pytest.FixtureRequest) -> Iterator[str]:
             if process.poll() is not None:
                 pytest.fail("Browser-test server exited before startup.")
             try:
-                if httpx.get(f"{url}/api/status").status_code == 200:
+                if httpx.get(f"{url}/healthz").status_code == 200:
                     break
             except httpx.ConnectError:
                 pass
@@ -463,4 +464,16 @@ def test_retro_layout_keyboard_and_reduced_motion(server: str, width: int) -> No
         page.keyboard.press("Escape")
         expect(page.locator("#services-dialog")).not_to_be_visible()
         expect(page.locator("#edit-services")).to_be_focused()
+        browser.close()
+
+
+def test_browser_password_login(server: str) -> None:
+    """Load the protected app and its API using browser-managed Basic credentials."""
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch()
+        context = browser.new_context(http_credentials={"username": "watch", "password": "browser-test-password"})
+        page = context.new_page()
+        page.goto(server)
+        expect(page.get_by_role("heading", name="Tonight, sorted.")).to_be_visible()
+        assert context.request.get(f"{server}/api/status").status == 200
         browser.close()

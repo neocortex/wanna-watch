@@ -9,6 +9,8 @@ Google-style docstrings, 119-character Python lines, and modules under 500 lines
 - Backend: Python 3.12+, FastAPI, httpx, SQLite, and python-dotenv.
 - Frontend: plain HTML/CSS/JavaScript served by FastAPI. No frontend bundler.
 - One personal server process. Preferences and history live in SQLite.
+- Railway uses a persistent /data volume, one replica, and no service sleeping.
+- WANNA_WATCH_PASSWORD is required on Railway; only GET /healthz bypasses authentication.
 - `TMDB_READ_TOKEN` is a server-only credential. Never expose or commit `.env`.
 - Catalogs must come from real TMDB/JustWatch and IMDb data. Do not seed demos.
 - IMDb ratings and IMDb votes must never be replaced with TMDB's rating fields.

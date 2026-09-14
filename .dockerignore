@@ -1,0 +1,10 @@
+# Only application source and dependency metadata belong in the image.
+*
+!Dockerfile
+!pyproject.toml
+!uv.lock
+!README.md
+!src/
+!src/**
+**/__pycache__/
+**/*.py[cod]
