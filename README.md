@@ -53,7 +53,9 @@ Visit `http://YOUR_MAC_LAN_IP:8000` in Safari. You can add that page to your Hom
 Screen from Safari's Share menu. Your Mac and the server must stay running.
 Local use has no login unless `WANNA_WATCH_PASSWORD` is set. For cloud hosting,
 follow the [Railway deployment guide](docs/deployment.md); Railway startup requires
-a password. Native iOS packaging is not implemented.
+a password. Hosted login stays signed in for 30 days per browser; use Sign out to
+end a session. Changing the password invalidates all sessions. Native iOS packaging
+is not implemented.
 
 ## Documentation
 

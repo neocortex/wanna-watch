@@ -468,12 +468,27 @@ def test_retro_layout_keyboard_and_reduced_motion(server: str, width: int) -> No
 
 
 def test_browser_password_login(server: str) -> None:
-    """Load the protected app and its API using browser-managed Basic credentials."""
+    """Persist login across browser contexts and clear it on sign out."""
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch()
-        context = browser.new_context(http_credentials={"username": "watch", "password": "browser-test-password"})
+        context = browser.new_context(viewport={"width": 390, "height": 844})
         page = context.new_page()
         page.goto(server)
+        page.get_by_label("Password", exact=True).fill("wrong")
+        page.get_by_role("button", name="Sign in", exact=True).click()
+        expect(page.get_by_role("alert")).to_be_visible()
+        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+        page.get_by_label("Password", exact=True).fill("browser-test-password")
+        page.get_by_role("button", name="Sign in", exact=True).click()
         expect(page.get_by_role("heading", name="Tonight, sorted.")).to_be_visible()
         assert context.request.get(f"{server}/api/status").status == 200
+        saved = context.storage_state()
+        context.close()
+        reopened = browser.new_context(storage_state=saved)
+        page = reopened.new_page()
+        page.goto(server)
+        expect(page.get_by_role("heading", name="Tonight, sorted.")).to_be_visible()
+        page.get_by_role("button", name="Sign out", exact=True).click()
+        expect(page.get_by_label("Password", exact=True)).to_be_visible()
+        assert reopened.request.get(f"{server}/api/status").status == 401
         browser.close()

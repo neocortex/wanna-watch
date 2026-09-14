@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · Wanna Watch</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/login.css">
+  <script src="/static/login.js" defer></script>
+</head>
+<body class="login-page">
+  <main class="login-content">
+    <h1>Wanna watch.</h1>
+    <p>Sign in to your shared film shelf.</p>
+    <form action="/login" method="post">
+      <input type="hidden" name="username" value="watch" autocomplete="username">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required aria-describedby="login-note login-error">
+      <p id="login-error" role="alert" hidden>That password didn’t match. Please try again.</p>
+      <button class="primary" type="submit">Sign in</button>
+      <p id="login-note">Stay signed in for 30 days on this device.</p>
+    </form>
+  </main>
+</body>
+</html>

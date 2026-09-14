@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Replace the browser password prompt with a mobile-friendly login page and 30-day
+  sessions, with sign out and automatic revocation when the shared password changes.
+
 - Protect hosted access with a shared password, reject cross-site writes, require
   credentials on Railway, and expose a minimal public healthcheck.
 

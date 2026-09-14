@@ -18,6 +18,10 @@ const languageNames = new Intl.DisplayNames(['en'], { type: 'language' });
 
 async function api(path, options = {}) {
   const response = await fetch(path, { ...options, headers: { 'Content-Type': 'application/json' } });
+  if (response.status === 401) {
+    location.assign("/login");
+    throw new Error("Your session ended. Please sign in again.");
+  }
   const data = await response.json();
   if (!response.ok) throw new Error(typeof data.detail === 'string' ? data.detail : 'Please check your selections.');
   return data;

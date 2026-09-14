@@ -1,0 +1,10 @@
+.login-page { min-height: 100svh; display: grid; place-items: center; padding: 28px; }
+.login-content { width: 100%; max-width: 380px; }
+.login-content h1 { margin: 0; color: var(--pink); font: italic 800 clamp(48px, 12vw, 72px)/1.05 var(--display); }
+.login-content > p { margin: 16px 0 32px; color: var(--muted); font-size: 18px; }
+.login-content form { display: grid; gap: 12px; }
+.login-content label { font-weight: 600; }
+.login-content input[type="password"] { width: 100%; min-height: 48px; font-size: 16px; padding: 10px 12px; background: #0b192c; color: var(--ink); border: 1px solid var(--line); border-radius: 3px; }
+.login-content button { min-height: 48px; margin-top: 8px; }
+#login-note { margin: 4px 0 0; color: var(--muted); }
+#login-error { margin: 0; color: var(--pink); }
