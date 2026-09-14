@@ -1,0 +1,44 @@
+[project]
+name = "wanna-watch"
+version = "0.1.0"
+description = "Find unseen films and series included in your German subscriptions, ranked by IMDb."
+readme = "README.md"
+authors = [
+    { name = "RSK" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.141.1",
+    "httpx>=0.28.1",
+    "python-dotenv>=1.2.3",
+    "uvicorn[standard]>=0.52.4",
+]
+
+[project.scripts]
+wanna-watch = "wanna_watch:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 119
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: tests using real databases or upstream datasets",
+    "e2e: browser tests against the running application",
+    "live: tests requiring a TMDB token and real upstream APIs",
+]
+
+[dependency-groups]
+dev = [
+    "playwright>=1.62.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.7",
+]
