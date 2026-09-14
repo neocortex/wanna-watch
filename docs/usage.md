@@ -57,3 +57,12 @@ Set `WANNA_WATCH_DATA_DIR` in the shell environment to use another directory.
 Stop the server before copying the data directory for a backup. Do not delete the
 SQLite database when clearing generated test output. After upgrading an older
 catalog, refresh it to populate newly supported metadata and series.
+
+## Appearance and accessibility
+
+The interface uses an 80s neon video-store design, with a decorative storefront
+background and real TMDB movie posters. Filters and actions remain standard
+keyboard-accessible controls. The subscription dialog supports Escape and returns
+focus to Choose services. The title illumination and poster hover motion respect
+your device’s reduced-motion preference. Fonts and decorative artwork are served
+locally; catalog data and poster sources are unchanged.

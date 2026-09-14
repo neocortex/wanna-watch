@@ -45,6 +45,25 @@ function link(label, href, className) {
   return node;
 }
 
+/** Create a decorative icon without changing its control's accessible name. */
+function icon(name) {
+  const paths = {
+    check: 'M5 12l4 4L19 6',
+    star: 'm12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z',
+    hide: 'M3 3l18 18M10 5.2a10 10 0 0 1 11 6.8 17 17 0 0 1-3 4M6 6a17 17 0 0 0-3 6s3 7 9 7a10 10 0 0 0 4-.8M10 10a3 3 0 0 0 4 4',
+    restore: 'M4 5v6h6M4 11a8 8 0 1 1 1 7',
+    external: 'M6 18 18 6M6 6h12v12',
+  };
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'icon');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', paths[name]);
+  svg.append(path);
+  return svg;
+}
+
 async function loadStatus() {
   const request = ++statusRequest;
   const s = await api('/api/status');
@@ -52,7 +71,7 @@ async function loadStatus() {
   const previous = currentStatus;
   currentStatus = s;
   $('#refresh').disabled = s.running || !s.configured || !s.preferences.provider_ids.length;
-  $('#refresh').textContent = s.running ? 'Refreshing…' : '↻ Refresh catalog';
+  $('#refresh-label').textContent = s.running ? 'Refreshing…' : 'Refresh catalog';
   $('#edit-services').disabled = s.running;
   $('#min-votes').disabled = s.running;
   $('#film-filters').disabled = s.running;
@@ -91,7 +110,9 @@ function renderSelected() {
   if (!ids.length) container.append(element('span', 'muted', 'Choose the subscriptions you pay for.'));
   for (const id of ids) {
     const provider = providers.find(p => p.provider_id === id);
-    container.append(element('span', 'chip', `✓ ${provider?.provider_name || `Service ${id}`}`));
+    const chip = element('span', 'chip', provider?.provider_name || `Service ${id}`);
+    chip.prepend(icon('check'));
+    container.append(chip);
   }
 }
 
@@ -146,20 +167,26 @@ function renderMovie(movie, rank) {
   if (movie.is_standup) genres.push('Stand-up comedy');
   card.append(element('p', 'movie-genres', genres.join(' · ') || 'Genres unavailable'));
   const rating = element('div', 'rating-line');
-  rating.append(link(`★ ${movie.imdb_rating.toFixed(1)}`, `https://www.imdb.com/title/${movie.imdb_id}/`, 'rating'));
+  const score = link(movie.imdb_rating.toFixed(1), `https://www.imdb.com/title/${movie.imdb_id}/`, 'rating');
+  score.setAttribute('aria-label', `IMDb rating ${movie.imdb_rating.toFixed(1)}`);
+  score.prepend(icon('star'));
+  rating.append(score);
   rating.append(element('span', 'rating-label', `IMDb · ${movie.imdb_votes.toLocaleString()} votes`));
   card.append(rating, element('p', 'providers', movie.providers.map(p => p.provider_name).join(' · ')));
   const synopsis = element('details', 'synopsis');
   synopsis.append(element('summary', '', 'Synopsis'), element('p', '', movie.overview || 'No synopsis available.'));
   card.append(synopsis);
   const actions = element('div', 'movie-actions');
-  const choices = view === 'unseen' ? [['watched', '✓ Watched'], ['hidden', 'Hide']] : [['unseen', 'Restore']];
+  const choices = view === 'unseen' ? [['watched', 'Watched'], ['hidden', 'Hide']] : [['unseen', 'Restore']];
   for (const [state, label] of choices) {
     const button = element('button', '', label);
+    button.prepend(icon(state === 'watched' ? 'check' : state === 'hidden' ? 'hide' : 'restore'));
     button.addEventListener('click', () => changeState(movie, state, button));
     actions.append(button);
   }
-  card.append(actions, link('Where to watch ↗', `https://www.themoviedb.org/${movie.media_type || 'movie'}/${movie.id}/watch?locale=DE`, 'where-link'));
+  const watchLink = link('Where to watch', `https://www.themoviedb.org/${movie.media_type || 'movie'}/${movie.id}/watch?locale=DE`, 'where-link');
+  watchLink.append(icon('external'));
+  card.append(actions, watchLink);
   return card;
 }
 

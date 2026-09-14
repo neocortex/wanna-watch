@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Redesign the catalog as an 80s neon video store with pink/cyan lettering,
+  generated storefront artwork, self-hosted Barlow fonts, and framed real posters.
+- Compact the subscription and filter layout across desktop and mobile, preserve
+  the refresh icon during status updates, and add keyboard/reduced-motion checks.
+
 - Consolidate project documentation under docs/ and expand generated-file ignore rules.
 
 - Change rating filtering to an inclusive maximum, preserving lower-rated results.

@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-14T09:25:00.491502+00:00",
+  "title": "Design System: Wanna Watch",
+  "extensions": {
+    "colorMeta": {
+      "pink": {
+        "role": "primary",
+        "displayName": "Neon pink"
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Electric cyan"
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Night navy"
+      },
+      "rating": {
+        "role": "tertiary",
+        "displayName": "Warm rating gold"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Neon display",
+        "purpose": "Italic uppercase heading; condensed extra-bold lettering."
+      }
+    },
+    "shadows": [
+      {
+        "name": "heading",
+        "value": "2px 3px 0 #18527d, 0 5px 23px #ec42b757",
+        "purpose": "Neon heading text shadow."
+      },
+      {
+        "name": "action-glow",
+        "value": "0 3px 16px #ec42b72b",
+        "purpose": "Primary buttons and selected media tabs."
+      },
+      {
+        "name": "poster-hover",
+        "value": "0 12px 28px #05030dc9",
+        "purpose": "Lifted poster link."
+      },
+      {
+        "name": "toast",
+        "value": "0 10px 35px #0009",
+        "purpose": "Undo feedback above catalog."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-display",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Heading illumination and poster lift."
+      },
+      {
+        "name": "illuminate",
+        "value": "1.2s",
+        "purpose": "One heading text-shadow transition; reduced motion omits animation."
+      },
+      {
+        "name": "poster-lift",
+        "value": "250ms",
+        "purpose": "TranslateY(-5px) on hover-capable devices without reduced motion."
+      },
+      {
+        "name": "control-state",
+        "value": "150ms",
+        "purpose": "Button and link colors, backgrounds and borders; omitted for reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tablet-wide",
+        "value": "1100px"
+      },
+      {
+        "name": "filter-stack",
+        "value": "850px"
+      },
+      {
+        "name": "phone",
+        "value": "700px"
+      },
+      {
+        "name": "phone-narrow",
+        "value": "360px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Catalog action with visible keyboard focus.",
+      "html": "<button class=\"ds-button-primary\">Refresh catalog</button>",
+      "css": ".ds-button-primary{font:600 15px/1.5 'Barlow',sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;border:1px solid var(--line);border-radius:3px;padding:11px 18px;cursor:pointer;background:#170e2bc9;color:var(--pink);border-color:var(--pink);box-shadow:0 3px 16px #ec42b72b;}.ds-button-primary:hover{background:#3b1641;color:#ffd8f4;border-color:var(--accent);}.ds-button-primary:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}.ds-button-primary:disabled{opacity:.5;cursor:not-allowed;}@media(prefers-reduced-motion:no-preference){.ds-button-primary{transition:color .15s,background-color .15s,border-color .15s;}}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Catalog action with visible keyboard focus.",
+      "html": "<button class=\"ds-button-secondary\">Show more titles</button>",
+      "css": ".ds-button-secondary{font:600 15px/1.5 'Barlow',sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;border:1px solid var(--line);border-radius:3px;padding:11px 18px;cursor:pointer;background:transparent;color:var(--ink);}.ds-button-secondary:hover{background:#1b2931;border-color:var(--accent);}.ds-button-secondary:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}.ds-button-secondary:disabled{opacity:.5;cursor:not-allowed;}@media(prefers-reduced-motion:no-preference){.ds-button-secondary{transition:color .15s,background-color .15s,border-color .15s;}}"
+    },
+    {
+      "name": "Text Button",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Low emphasis reset and undo action.",
+      "html": "<button class=\"ds-text\">Reset filters</button>",
+      "css": ".ds-text{font:15px/1.5 'Barlow',sans-serif;color:var(--accent);background:transparent;border:0;padding:8px 0;min-height:44px;cursor:pointer;}.ds-text:hover{color:#c4f7ff;text-decoration:underline;text-underline-offset:4px;}.ds-text:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}"
+    },
+    {
+      "name": "Numeric Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Visible label and native numeric editing.",
+      "html": "<label class=\"ds-label\">Released after<input class=\"ds-field\" type=\"number\" min=\"0\" max=\"9999\" placeholder=\"Any year\"></label>",
+      "css": ".ds-label{display:grid;gap:6px;color:var(--ink);font:12px/1.5 'Barlow',sans-serif;}.ds-field{font:15px/1.5 'Barlow',sans-serif;padding:10px 12px;min-height:44px;background:#0b192c;color:var(--ink);border:1px solid #4d698b;border-radius:3px;caret-color:var(--accent);}.ds-field::placeholder{color:#a59ab8;opacity:1;}.ds-field:hover{border-color:#88729b;}.ds-field:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}"
+    },
+    {
+      "name": "Subscription Chip",
+      "kind": "chip",
+      "refersTo": "subscription-chip",
+      "description": "Selected service label; the documentation preview uses a generic label.",
+      "html": "<span class=\"ds-chip\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12l4 4L19 6\"/></svg>Selected service</span>",
+      "css": ".ds-chip{display:inline-flex;align-items:center;justify-content:center;gap:7px;font:600 14px/1.5 'Barlow',sans-serif;border:1px solid #3a5678;background:#0c1930d9;padding:11px 15px;min-height:48px;border-radius:4px;color:#e3ecff;}.ds-chip svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}"
+    },
+    {
+      "name": "Watch Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Watch-state tabs expose selection independently of color.",
+      "html": "<nav class=\"ds-tabs\" aria-label=\"Watch status\"><button aria-pressed=\"true\">To discover</button><button aria-pressed=\"false\">Watched</button><button aria-pressed=\"false\">Hidden</button></nav>",
+      "css": ".ds-tabs{display:flex;gap:27px;}.ds-tabs button{font:500 15px/1.5 'Barlow',sans-serif;background:transparent;border:0;border-bottom:2px solid transparent;padding:0 0 12px;color:var(--muted);min-height:44px;cursor:pointer;}.ds-tabs button:hover{color:var(--ink);}.ds-tabs button[aria-pressed=true]{color:var(--pink);border-color:var(--pink);text-shadow:0 2px 12px #ff55be60;}.ds-tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}"
+    },
+    {
+      "name": "Poster Sleeve",
+      "kind": "card",
+      "refersTo": "poster-sleeve",
+      "description": "Missing-poster state, without inventing catalog metadata.",
+      "html": "<article class=\"ds-card\"><a class=\"ds-poster\" href=\"https://www.imdb.com/\" aria-label=\"IMDb\"><span>Poster unavailable</span></a></article>",
+      "css": ".ds-card{padding:12px;border:1px solid #263e5b;border-radius:5px;background:#071324;max-width:260px;}.ds-poster{display:grid;place-items:center;aspect-ratio:2/3;border-radius:3px;overflow:hidden;background:var(--panel);color:var(--muted);font:15px/1.5 'Barlow',sans-serif;text-decoration:none;text-align:center;}.ds-poster:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}@media(hover:hover) and (prefers-reduced-motion:no-preference){.ds-poster{transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s;}.ds-poster:hover{transform:translateY(-5px);box-shadow:0 12px 28px #05030dc9;}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Neon video store",
+    "overview": "A cinematic night scene frames a practical personal catalog. Pink illuminated lettering and cyan details recall a video-store frontage, while navy surfaces give real film artwork room to carry the browsing experience.\n\nThe interface pairs expressive italic display lettering with readable, compact controls. Atmosphere belongs in the masthead and decorative storefront; catalog information remains live text.",
+    "keyCharacteristics": [
+      "Illuminated pink display text and cyan interaction cues.",
+      "Dark rectangular controls and closely framed poster sleeves.",
+      "Real catalog imagery, restrained movement, and visible keyboard focus."
+    ],
+    "rules": [
+      {
+        "name": "The Signage Rule",
+        "body": "Reserve luminous text shadows for the brand, display heading and selected tabs; keep descriptions and filter labels readable without glow.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do preserve real artwork and readable factual labels.",
+      "Do retain responsive poster columns, cyan keyboard focus and reduced motion support.",
+      "Do preserve generated artwork provenance and font licensing."
+    ],
+    "donts": [
+      "Don't replace real catalog data with generated posters or scores.",
+      "Don't embed functional labels in imagery.",
+      "Don't extend glow or movement to every label."
+    ]
+  }
+}

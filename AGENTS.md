@@ -42,3 +42,10 @@ Keep [README.md](README.md), the guides in [docs/](docs/), and
 [docs/CHANGELOG.md](docs/CHANGELOG.md) current when changing behavior, setup, or scope.
 Keep README.md and AGENTS.md at the root; place other project documentation in docs/.
 Never use `--no-verify` when committing. Do not add a Codex co-author.
+
+## Frontend assets
+
+- Self-host display/body fonts under `src/wanna_watch/static/fonts/` with their license.
+- Keep decorative artwork separate from real catalog posters and metadata. Store
+  generated artwork provenance with the image and in `.impeccable/build/`.
+- Preserve keyboard focus and `prefers-reduced-motion` behavior when changing UI motion.

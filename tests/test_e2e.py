@@ -90,8 +90,13 @@ def test_mobile_setup_without_credentials(server: str) -> None:
         page.get_by_text("Add TMDB_READ_TOKEN", exact=False).wait_for()
         assert page.locator("#save-services").is_disabled()
         page.get_by_role("button", name="Close subscriptions").click()
-        page.get_by_role("button", name="Watched", exact=True).click()
-        assert page.get_by_role("button", name="Watched", exact=True).get_attribute("aria-pressed") == "true"
+        page.get_by_role("navigation", name="Watch status").get_by_role("button", name="Watched", exact=True).click()
+        assert (
+            page.get_by_role("navigation", name="Watch status")
+            .get_by_role("button", name="Watched", exact=True)
+            .get_attribute("aria-pressed")
+            == "true"
+        )
         assert errors == []
         Path("test-results").mkdir(exist_ok=True)
         page.screenshot(path="test-results/mobile-setup.png", full_page=True)
@@ -115,7 +120,7 @@ def test_real_catalog_watch_hide_undo_and_reload(server: str) -> None:
         page.locator(f'[data-movie-id="{movie_id}"]').wait_for(state="detached")
         page.reload()
         page.locator(".movie-card").first.wait_for()
-        page.get_by_role("button", name="Watched", exact=True).click()
+        page.get_by_role("navigation", name="Watch status").get_by_role("button", name="Watched", exact=True).click()
         watched = page.locator(f'[data-movie-id="{movie_id}"]')
         watched.wait_for()
         watched.get_by_role("button", name="Restore").click()
@@ -298,7 +303,7 @@ def test_real_catalog_maximum_rating_and_reset(server: str) -> None:
             assert page.locator(".filter-help, .filter-label").count() == 0
             assert "TMDB keyword" not in page.locator("#filters-form").inner_text()
             expect(page.locator("#count")).to_have_text(f"{result['total']:,} titles")
-            expect(page.locator(".rating").first).to_have_text(f"★ {rating}")
+            expect(page.locator(".rating").first).to_have_text(rating)
         page.reload()
         page.locator(".movie-card").first.wait_for()
         expect(page.locator("#imdb-rating")).to_have_value("6.9")
@@ -403,12 +408,12 @@ def test_separate_film_and_series_lists(server: str) -> None:
         selector = f'.movie-card[data-media-type="tv"][data-movie-id="{movie_id}"]'
         first.get_by_role("button", name="Watched").click()
         page.locator(selector).wait_for(state="detached")
-        page.get_by_role("button", name="Watched", exact=True).click()
+        page.get_by_role("navigation", name="Watch status").get_by_role("button", name="Watched", exact=True).click()
         page.locator(selector).wait_for()
         page.reload()
         expect(page.locator("#media-type")).to_have_value("tv")
         page.locator(".movie-card").first.wait_for()
-        page.get_by_role("button", name="Watched", exact=True).click()
+        page.get_by_role("navigation", name="Watch status").get_by_role("button", name="Watched", exact=True).click()
         page.locator(selector).get_by_role("button", name="Restore").click()
         page.locator(selector).wait_for(state="detached")
         page.get_by_role("button", name="To discover", exact=True).click()
@@ -432,4 +437,30 @@ def test_separate_film_and_series_lists(server: str) -> None:
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
         assert errors == []
         page.screenshot(path="test-results/mobile-series.png")
+        browser.close()
+
+
+@pytest.mark.parametrize("width", [320, 390, 1440])
+def test_retro_layout_keyboard_and_reduced_motion(server: str, width: int) -> None:
+    """Keep retro assets, filters, focus and reduced-motion behavior usable at each width."""
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch()
+        page = browser.new_page(viewport={"width": width, "height": 900}, reduced_motion="reduce")
+        page.goto(server)
+        page.locator("#empty:not([hidden])").wait_for()
+        page.evaluate("document.fonts.ready")
+        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+        assert page.locator("h1").evaluate("el => getComputedStyle(el).animationName") == "none"
+        expect(page.locator("#refresh-label")).to_have_text("Refresh catalog")
+        expect(page.locator("#refresh svg")).to_be_visible()
+        assert page.request.get(f"{server}/static/images/video-store.jpg").status == 200
+        assert page.evaluate("document.fonts.check('italic 800 64px \"Barlow Condensed\"')")
+        for selector in ["#language", "#after-year", "#imdb-rating"]:
+            assert page.locator(selector).bounding_box()["width"] >= 120
+        page.locator("#edit-services").focus()
+        page.keyboard.press("Enter")
+        expect(page.locator("#services-dialog")).to_be_visible()
+        page.keyboard.press("Escape")
+        expect(page.locator("#services-dialog")).not_to_be_visible()
+        expect(page.locator("#edit-services")).to_be_focused()
         browser.close()

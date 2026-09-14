@@ -52,3 +52,8 @@ uv run pytest --cov=src/wanna_watch --cov-report=term-missing
 Generated test reports and caches are ignored and can be deleted. Historical
 session-by-session verification logs are not maintained as project documentation;
 use test output and the timestamped JSON audit for current evidence.
+
+The retro-interface E2E checks cover 320, 390, and 1440 pixel viewports,
+locally served artwork/fonts, reduced-motion behavior, and subscription-dialog
+keyboard focus restoration. Populated interaction tests continue to use a copy
+of the actual catalog.

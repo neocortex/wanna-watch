@@ -3,6 +3,9 @@
 Find unseen films and series included in your German subscriptions, ordered by **IMDb**
 rating. A personal web app that works in desktop and phone browsers.
 
+The neon video-store interface uses locally hosted fonts and decorative artwork,
+with keyboard-accessible controls and support for reduced motion.
+
 The app uses real TMDB/JustWatch availability and IMDb's official ratings
 dataset. It starts empty; no demonstration titles or invented availability are
 loaded. See the [documentation](#documentation) for usage and development details.
