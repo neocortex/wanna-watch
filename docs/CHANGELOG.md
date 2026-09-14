@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Deepen the neon video-store interface with layered navy gradients, a structured responsive filter console,
+  polished poster sleeves, and restrained storefront, heading, refresh, and hover motion.
+- Replace the storefront marquee copy with fictional text-free poster artwork, change the masthead line to
+  “Less scrolling, more watching,” and make Released after a complete year dropdown.
+- Give the live-text title a split-tone highlight, rim light and stepped extrusion, and make the wordmark more
+  dynamic with independently angled words, layered shadows and three cyan speed lines.
+
 - Replace the browser password prompt with a mobile-friendly login page and 30-day
   sessions, with sign out and automatic revocation when the shared password changes.
 

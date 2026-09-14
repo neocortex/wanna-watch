@@ -24,24 +24,24 @@
     "typographyMeta": {
       "display": {
         "displayName": "Neon display",
-        "purpose": "Italic uppercase heading; condensed extra-bold lettering."
+        "purpose": "Italic uppercase heading with solid split-tone highlight and stepped extrusion."
       }
     },
     "shadows": [
       {
         "name": "heading",
-        "value": "2px 3px 0 #18527d, 0 5px 23px #ec42b757",
-        "purpose": "Neon heading text shadow."
+        "value": "1px 2px 0 #ffb2e5, 3px 4px 0 #25aace, 5px 7px 0 #17476e, 8px 10px 0 #06152d, 0 13px 30px #ec42b76b",
+        "purpose": "Pale rim, cyan/navy extrusion and localized neon light."
       },
       {
         "name": "action-glow",
         "value": "0 3px 16px #ec42b72b",
-        "purpose": "Primary buttons and selected media tabs."
+        "purpose": "Primary actions only."
       },
       {
         "name": "poster-hover",
-        "value": "0 12px 28px #05030dc9",
-        "purpose": "Lifted poster link."
+        "value": "0 18px 34px -13px #000c",
+        "purpose": "Neutral elevation for a lifted poster link."
       },
       {
         "name": "toast",
@@ -56,9 +56,9 @@
         "purpose": "Heading illumination and poster lift."
       },
       {
-        "name": "illuminate",
-        "value": "1.2s",
-        "purpose": "One heading text-shadow transition; reduced motion omits animation."
+        "name": "power-on",
+        "value": "800ms / 750ms / 680ms",
+        "purpose": "One storefront, heading and underline sequence; reduced motion omits animation."
       },
       {
         "name": "poster-lift",
@@ -68,7 +68,12 @@
       {
         "name": "control-state",
         "value": "150ms",
-        "purpose": "Button and link colors, backgrounds and borders; omitted for reduced motion."
+        "purpose": "Button, link and field colors, backgrounds and borders."
+      },
+      {
+        "name": "refresh-progress",
+        "value": "900ms linear",
+        "purpose": "Turns the refresh icon only while work is active; reduced motion uses opacity."
       }
     ],
     "breakpoints": [
@@ -116,12 +121,12 @@
       "css": ".ds-text{font:15px/1.5 'Barlow',sans-serif;color:var(--accent);background:transparent;border:0;padding:8px 0;min-height:44px;cursor:pointer;}.ds-text:hover{color:#c4f7ff;text-decoration:underline;text-underline-offset:4px;}.ds-text:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}"
     },
     {
-      "name": "Numeric Field",
-      "kind": "input",
+      "name": "Year Select",
+      "kind": "select",
       "refersTo": "field",
-      "description": "Visible label and native numeric editing.",
-      "html": "<label class=\"ds-label\">Released after<input class=\"ds-field\" type=\"number\" min=\"0\" max=\"9999\" placeholder=\"Any year\"></label>",
-      "css": ".ds-label{display:grid;gap:6px;color:var(--ink);font:12px/1.5 'Barlow',sans-serif;}.ds-field{font:15px/1.5 'Barlow',sans-serif;padding:10px 12px;min-height:44px;background:#0b192c;color:var(--ink);border:1px solid #4d698b;border-radius:3px;caret-color:var(--accent);}.ds-field::placeholder{color:#a59ab8;opacity:1;}.ds-field:hover{border-color:#88729b;}.ds-field:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}"
+      "description": "Visible label and native exclusive release-year selection.",
+      "html": "<label class=\"ds-label\">Released after<select class=\"ds-field\"><option>Any year</option><option>2025</option></select></label>",
+      "css": ".ds-label{display:grid;gap:7px;color:#dce7f8;font:500 12px/1.5 'Barlow',sans-serif;}.ds-field{font:15px/1.5 'Barlow',sans-serif;padding:10px 36px 10px 12px;min-height:46px;background:linear-gradient(180deg,#12243a,#0a1728);color:var(--ink);border:1px solid #4d698b;border-radius:3px;}.ds-field:hover{border-color:#88729b;}.ds-field:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}"
     },
     {
       "name": "Subscription Chip",
@@ -129,7 +134,7 @@
       "refersTo": "subscription-chip",
       "description": "Selected service label; the documentation preview uses a generic label.",
       "html": "<span class=\"ds-chip\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12l4 4L19 6\"/></svg>Selected service</span>",
-      "css": ".ds-chip{display:inline-flex;align-items:center;justify-content:center;gap:7px;font:600 14px/1.5 'Barlow',sans-serif;border:1px solid #3a5678;background:#0c1930d9;padding:11px 15px;min-height:48px;border-radius:4px;color:#e3ecff;}.ds-chip svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}"
+      "css": ".ds-chip{display:inline-flex;align-items:center;justify-content:center;gap:7px;font:600 14px/1.5 'Barlow',sans-serif;border:1px solid #3a5678;background:linear-gradient(180deg,#132742e8,#0b182dde);padding:10px 15px;min-height:44px;border-radius:4px;color:#e3ecff;}.ds-chip svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}"
     },
     {
       "name": "Watch Navigation",
@@ -145,7 +150,7 @@
       "refersTo": "poster-sleeve",
       "description": "Missing-poster state, without inventing catalog metadata.",
       "html": "<article class=\"ds-card\"><a class=\"ds-poster\" href=\"https://www.imdb.com/\" aria-label=\"IMDb\"><span>Poster unavailable</span></a></article>",
-      "css": ".ds-card{padding:12px;border:1px solid #263e5b;border-radius:5px;background:#071324;max-width:260px;}.ds-poster{display:grid;place-items:center;aspect-ratio:2/3;border-radius:3px;overflow:hidden;background:var(--panel);color:var(--muted);font:15px/1.5 'Barlow',sans-serif;text-decoration:none;text-align:center;}.ds-poster:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}@media(hover:hover) and (prefers-reduced-motion:no-preference){.ds-poster{transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s;}.ds-poster:hover{transform:translateY(-5px);box-shadow:0 12px 28px #05030dc9;}}"
+      "css": ".ds-card{padding:12px;border-radius:5px;background:linear-gradient(155deg,#0a1a30,#06101f 66%);box-shadow:inset 0 0 0 1px #263e5b,0 16px 40px -34px #000;max-width:260px;}.ds-poster{display:grid;place-items:center;aspect-ratio:2/3;border-radius:3px;overflow:hidden;background:var(--panel);color:var(--muted);font:15px/1.5 'Barlow',sans-serif;text-decoration:none;text-align:center;box-shadow:0 14px 30px -22px #000;}.ds-poster:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}@media(hover:hover) and (prefers-reduced-motion:no-preference){.ds-poster{transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s;}.ds-poster:hover{transform:translateY(-5px);box-shadow:0 18px 34px -13px #000c;}}"
     }
   ],
   "narrative": {
@@ -153,7 +158,7 @@
     "overview": "A cinematic night scene frames a practical personal catalog. Pink illuminated lettering and cyan details recall a video-store frontage, while navy surfaces give real film artwork room to carry the browsing experience.\n\nThe interface pairs expressive italic display lettering with readable, compact controls. Atmosphere belongs in the masthead and decorative storefront; catalog information remains live text.",
     "keyCharacteristics": [
       "Illuminated pink display text and cyan interaction cues.",
-      "Dark rectangular controls and closely framed poster sleeves.",
+      "Layered navy control surfaces, purpose-sized fields and closely framed poster sleeves.",
       "Real catalog imagery, restrained movement, and visible keyboard focus."
     ],
     "rules": [
@@ -166,7 +171,8 @@
     "dos": [
       "Do preserve real artwork and readable factual labels.",
       "Do retain responsive poster columns, cyan keyboard focus and reduced motion support.",
-      "Do preserve generated artwork provenance and font licensing."
+      "Do preserve generated artwork provenance and font licensing.",
+      "Do use the year dropdown for the exclusive release-year filter."
     ],
     "donts": [
       "Don't replace real catalog data with generated posters or scores.",

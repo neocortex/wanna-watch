@@ -76,6 +76,7 @@ async function loadStatus() {
   currentStatus = s;
   $('#refresh').disabled = s.running || !s.configured || !s.preferences.provider_ids.length;
   $('#refresh-label').textContent = s.running ? 'Refreshing…' : 'Refresh catalog';
+  $('#refresh').classList.toggle('is-refreshing', s.running);
   $('#edit-services').disabled = s.running;
   $('#min-votes').disabled = s.running;
   $('#film-filters').disabled = s.running;
@@ -125,7 +126,7 @@ function renderFilters() {
   $('#media-type').value = prefs.media_type === 'tv' ? 'tv' : 'movie';
   renderMediaTabs();
   $('#language').value = prefs.language || 'all';
-  $('#after-year').value = prefs.after_year ?? '';
+  renderYearOptions(prefs.after_year);
   $('#imdb-rating').value = prefs.imdb_rating ?? '';
   $('#genre-options').replaceChildren();
   const genres = [...(currentStatus.genres || []), { id: 'standup', name: 'Stand-up comedy' }]
@@ -141,6 +142,19 @@ function renderFilters() {
   }
   const hidden = (prefs.excluded_genres || []).length + Number(prefs.exclude_standup || false);
   $('#genre-summary').textContent = `Exclude genres${hidden ? ` · ${hidden} excluded` : ''}`;
+}
+
+/** Populate the exclusive release-year filter with complete, readable choices. */
+function renderYearOptions(selectedYear) {
+  const select = $('#after-year');
+  const latestYear = new Date().getFullYear() - 1;
+  const years = Array.from({ length: latestYear - 1899 }, (_, index) => latestYear - index);
+  if (Number.isInteger(selectedYear) && !years.includes(selectedYear)) years.push(selectedYear);
+  select.replaceChildren(new Option('Any year', ''));
+  for (const year of years.sort((first, second) => second - first)) {
+    select.append(new Option(String(year), String(year)));
+  }
+  select.value = selectedYear ?? '';
 }
 
 function renderMovie(movie, rank) {

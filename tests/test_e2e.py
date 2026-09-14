@@ -210,7 +210,7 @@ def test_real_catalog_genre_language_year_filters(server: str) -> None:
         page.locator("#exclude-standup").check()
         page.locator("#language").select_option("en")
         with page.expect_response(lambda response: "/api/movies?" in response.url):
-            page.locator("#after-year").fill("1990")
+            page.locator("#after-year").select_option("1990")
         page.wait_for_function("pendingPreferences === 0 && !filterTimer && !filtersDirty && !loading")
         expect(page.locator("#after-year")).to_have_value("1990")
         with httpx.Client(base_url=server) as client:
@@ -351,7 +351,7 @@ def test_automatic_filters_keep_latest_edit_on_slow_network(server: str) -> None
         rating.fill("6.9")
         page.locator("#language").select_option("de")
         page.locator("#language").select_option("en")
-        page.locator("#after-year").fill("2000")
+        page.locator("#after-year").select_option("2000")
         page.wait_for_function("pendingPreferences === 0 && !filterTimer && !filtersDirty && !loading")
         expect(rating).to_have_value("6.9")
         expect(page.locator("#language")).to_have_value("en")
@@ -452,10 +452,13 @@ def test_retro_layout_keyboard_and_reduced_motion(server: str, width: int) -> No
         page.evaluate("document.fonts.ready")
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
         assert page.locator("h1").evaluate("el => getComputedStyle(el).animationName") == "none"
+        expect(page.locator(".brand-description")).to_contain_text("Less scrolling,")
         expect(page.locator("#refresh-label")).to_have_text("Refresh catalog")
         expect(page.locator("#refresh svg")).to_be_visible()
         assert page.request.get(f"{server}/static/images/video-store.jpg").status == 200
         assert page.evaluate("document.fonts.check('italic 800 64px \"Barlow Condensed\"')")
+        assert page.locator("#after-year").evaluate("element => element.tagName") == "SELECT"
+        expect(page.locator('#after-year option[value="1990"]')).to_have_count(1)
         for selector in ["#language", "#after-year", "#imdb-rating"]:
             assert page.locator(selector).bounding_box()["width"] >= 120
         page.locator("#edit-services").focus()

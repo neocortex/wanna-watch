@@ -1,1 +1,18 @@
-{"buildPath":"comp"}
+{
+  "buildPath": "comp",
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "src/wanna_watch/static/index.html"
+        ],
+        "createdAt": "2026-09-14T13:36:34.258Z",
+        "reason": "User confirmed the 80s neon visual world; chromatic glow remains limited to brand signage and primary states."
+      }
+    ]
+  }
+}

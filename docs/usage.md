@@ -15,16 +15,16 @@ whole show. Cards show season counts, and posters open IMDb.
 | Minimum IMDb votes | Inclusive minimum; initially 5,000 |
 | Exclude genres | Hide titles matching any checked genre, including stand-up |
 | Original language | English, German, French, Other, or Any |
-| Released after | Exclusive year bound: 1990 includes 1991 onward |
+| Released after | Year dropdown with an exclusive bound: 1990 includes 1991 onward |
 | Maximum IMDb rating | Inclusive ceiling: 7.6 includes 7.6 and lower, still ranked descending |
 
 English is the default language. Animation, Documentary, and Stand-up comedy are
 excluded by default. **Reset filters** restores these defaults and clears the
 year/rating limits, keeping subscriptions, the selected list, and minimum votes.
 
-Selections update immediately. Year and rating fields update after a 350 ms typing
-pause; incomplete or invalid numbers are not saved. A blank number field removes
-that restriction. The rating ceiling accepts 1.0–10.0 in 0.1 steps.
+Selections, including the release-year dropdown, update immediately. The rating field updates after
+a 350 ms typing pause; incomplete or invalid ratings are not saved. Selecting Any year or leaving the
+rating blank removes that restriction. The rating ceiling accepts 1.0–10.0 in 0.1 steps.
 
 Other languages means known languages outside English, German, and French.
 Missing language only matches Any; missing years are omitted when a year limit is
@@ -60,9 +60,9 @@ catalog, refresh it to populate newly supported metadata and series.
 
 ## Appearance and accessibility
 
-The interface uses an 80s neon video-store design, with a decorative storefront
-background and real TMDB movie posters. Filters and actions remain standard
-keyboard-accessible controls. The subscription dialog supports Escape and returns
-focus to Choose services. The title illumination and poster hover motion respect
-your device’s reduced-motion preference. Fonts and decorative artwork are served
-locally; catalog data and poster sources are unchanged.
+The interface uses an 80s neon video-store design, with a decorative storefront, fictional poster art,
+layered navy control surfaces, and real TMDB movie posters. Filters and actions remain standard
+keyboard-accessible controls. The subscription dialog supports Escape and returns focus to Choose services.
+The storefront power-on, title illumination, refresh progress, and poster hover motion respect your device’s
+reduced-motion preference. Fonts and decorative artwork are served locally; catalog data and poster sources
+are unchanged.
