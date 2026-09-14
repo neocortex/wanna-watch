@@ -2,6 +2,7 @@
 
 import hashlib
 import hmac
+import os
 import secrets
 import time
 from pathlib import Path
@@ -97,7 +98,7 @@ def install_auth(app: FastAPI, password: str) -> None:
                 session_token(password, int(time.time()) + SESSION_SECONDS),
                 max_age=SESSION_SECONDS,
                 httponly=True,
-                secure=request.url.scheme == "https",
+                secure=bool(os.getenv("RAILWAY_ENVIRONMENT_ID")) or request.url.scheme == "https",
                 samesite="lax",
             )
             return response

@@ -88,3 +88,13 @@ async def test_persistent_login_and_logout(tmp_path: Path, monkeypatch: pytest.M
         assert (await client.get("/api/status")).status_code == 200
         assert (await client.post("/logout")).status_code == 303
         assert (await client.get("/api/status")).status_code == 401
+
+
+@pytest.mark.anyio
+async def test_railway_proxy_cookie_is_secure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Mark cookies Secure even when Railway terminates HTTPS before the app."""
+    monkeypatch.setenv("WANNA_WATCH_PASSWORD", "secret")
+    monkeypatch.setenv("RAILWAY_ENVIRONMENT_ID", "production")
+    async with AsyncClient(transport=ASGITransport(create_app(tmp_path)), base_url="http://internal") as client:
+        response = await client.post("/login", data={"password": "secret"})
+        assert "Secure" in response.headers["set-cookie"]
