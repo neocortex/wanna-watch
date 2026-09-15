@@ -25,6 +25,10 @@ async def test_protected_routes_and_writes(tmp_path: Path, monkeypatch: pytest.M
     app = create_app(tmp_path)
     async with AsyncClient(transport=ASGITransport(app), base_url="https://test") as client:
         assert (await client.get("/healthz")).json() == {"status": "ok"}
+        favicon = await client.get("/static/favicon.svg")
+        assert favicon.status_code == 200
+        assert favicon.headers["content-type"].startswith("image/svg+xml")
+        assert '<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">' in (await client.get("/login")).text
         for path in ["/", "/static/app.js", "/api/status", "/docs", "/openapi.json"]:
             response = await client.get(path)
             assert response.status_code == 401
@@ -32,6 +36,7 @@ async def test_protected_routes_and_writes(tmp_path: Path, monkeypatch: pytest.M
         assert (await client.post("/api/refresh")).status_code == 401
         assert (await client.get("/api/status", auth=("watch", "wrong"))).status_code == 401
         await client.post("/login", data={"password": "secret"})
+        assert '<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">' in (await client.get("/")).text
         response = await client.get("/api/status")
         assert response.status_code == 200
         assert response.headers["cache-control"] == "no-store"

@@ -106,9 +106,12 @@ def install_auth(app: FastAPI, password: str) -> None:
             response = RedirectResponse("/login", status_code=303, headers={"Cache-Control": "no-store"})
             response.delete_cookie(COOKIE)
             return response
-        public_asset = path in {"/static/style.css", "/static/login.css", "/static/login.js"} or (
-            path.startswith("/static/fonts/") and ".." not in path
-        )
+        public_asset = path in {
+            "/static/style.css",
+            "/static/login.css",
+            "/static/login.js",
+            "/static/favicon.svg",
+        } or (path.startswith("/static/fonts/") and ".." not in path)
         if request.method == "GET" and (path == "/healthz" or public_asset):
             return await call_next(request)
         authorized = valid_session(request.cookies.get(COOKIE, ""), password)

@@ -35,6 +35,7 @@ test-results/
 /.codex/hooks.json
 /.claude/settings.local.json
 /.impeccable/config.local.json
+/.impeccable/hook.cache.json
 /.impeccable/review/
 /.impeccable/drafts/
 

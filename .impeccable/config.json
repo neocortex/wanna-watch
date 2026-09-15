@@ -12,6 +12,15 @@
         ],
         "createdAt": "2026-09-14T13:36:34.258Z",
         "reason": "User confirmed the 80s neon visual world; chromatic glow remains limited to brand signage and primary states."
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "src/wanna_watch/static/login.html"
+        ],
+        "createdAt": "2026-09-15T05:59:03.827Z",
+        "reason": "Existing neon signage is intentional: docs/DESIGN.md records the user-approved neon video store direction; this change only adds a favicon link."
       }
     ]
   }

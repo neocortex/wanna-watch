@@ -69,7 +69,7 @@ header { height: 110px; display: flex; gap: 40px; align-items: center; }
   position: relative;
   display: grid;
   justify-content: start;
-  gap: 28px;
+  gap: 64px;
   padding: 10px 0 26px;
 }
 .intro::before {
@@ -95,7 +95,7 @@ h1 {
 }
 h1::before { content: attr(data-text); position: absolute; z-index: 1; inset: 0; color: #ff78d2; -webkit-text-stroke: 1px #ffe0f5; clip-path: polygon(0 0, 100% 0, 100% 43%, 0 61%); text-shadow: none; pointer-events: none; }
 .intro-copy { position: relative; z-index: 1; min-width: 0; width: max-content; max-width: 100%; }
-.intro-copy::after { content: ''; position: absolute; left: 22%; right: -4%; bottom: -20px; height: 7px; background: linear-gradient(90deg, #ff67ce 0%, #ff4dbb 78%, #74e5ff 100%); transform: rotate(-2.5deg) skewX(-58deg); transform-origin: left center; box-shadow: 2px 3px 0 #174c77, 0 7px 16px #ff44bb61; }
+.intro-copy::after { content: ''; position: absolute; left: 22%; right: -4%; bottom: -12px; height: 5px; background: linear-gradient(90deg, #ff67ce 0%, #ff4dbb 78%, #74e5ff 100%); transform: rotate(-2.5deg) skewX(-58deg); transform-origin: right center; box-shadow: 2px 3px 0 #174c77, 0 7px 16px #ff44bb61; }
 .icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 .button {
   display: inline-flex;
@@ -270,11 +270,11 @@ input[type=search] { width: 100%; border: 1px solid #544660; border-radius: 3px;
   .brand::after { right: -1px; bottom: 11px; width: 27px; height: 2px; box-shadow: 0 5px 0 var(--accent), 0 10px 0 var(--accent); }
   .brand-description { display: none; }
   .region { font-size: 11px; margin-top: 20px; }
-  .intro { gap: 0; padding: 9px 0 22px; }
+  .intro { gap: 24px; padding: 9px 0 22px; }
   .intro::before { inset: -10px 4% 0 -18px; }
   h1 { font-size: clamp(72px, 18vw, 118px); line-height: .84; max-width: 6ch; margin-bottom: 29px; -webkit-text-stroke: .75px #ffd0ef; text-shadow: 1px 2px 0 #ffb2e5, 2px 3px 0 #25aace, 4px 5px 0 #17476e, 6px 7px 0 #06152d, 0 10px 23px #ec42b75c; }
   h1::before { -webkit-text-stroke-width: .75px; }
-  .intro-copy::after { left: 0; right: -10%; bottom: 13px; height: 4px; transform: rotate(-4deg) skewX(-58deg); }
+  .intro-copy::after { left: 0; right: -10%; bottom: 14px; height: 4px; transform: rotate(-4deg) skewX(-58deg); }
   .intro .button { min-width: 190px; min-height: 44px; font-size: 16px; }
   .preferences { margin: 0 -18px; padding: 8px 18px 16px; backdrop-filter: blur(8px); }
   .subscription-row { align-items: flex-start; padding: 8px 0 16px; gap: 12px; }

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add a pink-and-cyan W favicon on navy to the catalog and sign-in pages.
+
+- Anchor the diagonal heading underline below the punctuation and space it clear of the refresh action on all screens.
 - Deepen the neon video-store interface with layered navy gradients, a structured responsive filter console,
   polished poster sleeves, and restrained storefront, heading, refresh, and hover motion.
 - Replace the storefront marquee copy with fictional text-free poster artwork, change the masthead line to

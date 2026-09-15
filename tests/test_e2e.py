@@ -441,7 +441,7 @@ def test_separate_film_and_series_lists(server: str) -> None:
         browser.close()
 
 
-@pytest.mark.parametrize("width", [320, 390, 1440])
+@pytest.mark.parametrize("width", [320, 390, 700, 850, 1440])
 def test_retro_layout_keyboard_and_reduced_motion(server: str, width: int) -> None:
     """Keep retro assets, filters, focus and reduced-motion behavior usable at each width."""
     with sync_playwright() as playwright:
@@ -467,6 +467,8 @@ def test_retro_layout_keyboard_and_reduced_motion(server: str, width: int) -> No
         page.keyboard.press("Escape")
         expect(page.locator("#services-dialog")).not_to_be_visible()
         expect(page.locator("#edit-services")).to_be_focused()
+        Path("test-results").mkdir(exist_ok=True)
+        page.locator(".intro").screenshot(path=f"test-results/heading-{width}.png")
         browser.close()
 
 

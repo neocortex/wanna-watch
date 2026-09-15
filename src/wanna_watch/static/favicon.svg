@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Wanna Watch</title>
+  <rect width="64" height="64" rx="8" fill="#050d1d"/>
+  <path d="m12 19 3 31h10l9-17 1 17h10l15-31H49l-8 18-1-18H30l-9 18-1-18Z" fill="#4edcff"/>
+  <path d="m9 15 3 31h10l9-17 1 17h10l15-31H46l-8 18-1-18H27l-9 18-1-18Z" fill="#ff67ce"/>
+</svg>

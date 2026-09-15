@@ -3,7 +3,7 @@
 Find unseen films and series included in your German subscriptions, ordered by **IMDb**
 rating. A personal web app that works in desktop and phone browsers.
 
-The neon video-store interface uses locally hosted fonts, decorative artwork, and a structured
+The neon video-store interface uses locally hosted fonts, a matching W favicon, decorative artwork, and a structured
 filter console with keyboard-accessible controls and support for reduced motion.
 
 The app uses real TMDB/JustWatch availability and IMDb's official ratings

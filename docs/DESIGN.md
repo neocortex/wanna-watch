@@ -124,6 +124,9 @@ The palette combines electric signage with blue-black architectural surfaces.
 
 ### Primary
 
+The shared [SVG favicon](../src/wanna_watch/static/favicon.svg) reduces the angled wordmark to a bold
+pink W with a cyan extrusion on night navy. It is served publicly so the sign-in page uses the same mark.
+
 **Neon pink (`pink`)** carries the heading, brand, refresh button and selected navigation.
 
 ### Secondary
@@ -197,7 +200,9 @@ Exact motion and shadow values are also recorded in the [sidecar](../.impeccable
 Controls have small corners, chips are slightly rounder, and poster sleeves have the largest
 repeated corner radius. Rank badges have tight corners; dialogs are square. Poster artwork stays
 at a 2:3 ratio with clipped overflow. Avoid changing these practical rectangles into pill controls.
-The display heading has an angled pink-to-cyan underline. The wordmark gives `wanna` and `watch` separate
+The display heading has a diagonal pink-to-cyan underline anchored at its right end below the punctuation,
+with space for its lower left end above the refresh action.
+The wordmark gives `wanna` and `watch` separate
 angles and offsets, with three cyan speed lines completing the mark.
 Icons are inline SVG with round joins and caps, normally 18px with a 1.7px stroke. Rating stars
 are filled; decorative icons stay hidden from assistive technology while control labels remain text.
