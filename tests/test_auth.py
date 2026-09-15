@@ -29,7 +29,15 @@ async def test_protected_routes_and_writes(tmp_path: Path, monkeypatch: pytest.M
         assert favicon.status_code == 200
         assert favicon.headers["content-type"].startswith("image/svg+xml")
         assert '<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">' in (await client.get("/login")).text
-        for path in ["/", "/static/app.js", "/api/status", "/docs", "/openapi.json"]:
+        for path in [
+            "/",
+            "/static/app.js",
+            "/static/audio.js",
+            "/api/titles/movie/45269/audio",
+            "/api/status",
+            "/docs",
+            "/openapi.json",
+        ]:
             response = await client.get(path)
             assert response.status_code == 401
             assert "www-authenticate" not in response.headers

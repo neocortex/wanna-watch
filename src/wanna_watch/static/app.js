@@ -190,7 +190,13 @@ function renderMovie(movie, rank) {
   score.prepend(icon('star'));
   rating.append(score);
   rating.append(element('span', 'rating-label', `IMDb · ${movie.imdb_votes.toLocaleString()} votes`));
-  card.append(rating, element('p', 'providers', movie.providers.map(p => p.provider_name).join(' · ')));
+  const offers = element('p', 'providers');
+  for (const provider of movie.providers) {
+    const offer = element('span', 'provider-offer', provider.provider_name);
+    offer.dataset.providerId = provider.provider_id;
+    offers.append(offer);
+  }
+  card.append(rating, offers);
   const synopsis = element('details', 'synopsis');
   synopsis.append(element('summary', '', 'Synopsis'), element('p', '', movie.overview || 'No synopsis available.'));
   card.append(synopsis);
@@ -218,8 +224,12 @@ async function loadMovies(append = false) {
     const offset = append ? shown : 0;
     const data = await api(`/api/movies?view=${requestedView}&offset=${offset}&limit=40`);
     if (request !== movieRequest || requestedView !== view || filtersDirty || filterTimer) return;
-    if (!append) { $('#movies').replaceChildren(); shown = 0; }
-    for (const movie of data.movies) $('#movies').append(renderMovie(movie, ++shown));
+    if (!append) { audioObserver.disconnect(); $('#movies').replaceChildren(); shown = 0; }
+    for (const movie of data.movies) {
+      const card = renderMovie(movie, ++shown);
+      $('#movies').append(card);
+      observeAudio(card, movie);
+    }
     $('#count').textContent = `${data.total.toLocaleString()} titles`;
     $('#load-more').hidden = shown >= data.total;
     $('#empty').hidden = data.total > 0;

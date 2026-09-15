@@ -34,6 +34,22 @@ and ID before pagination.
 Stand-up uses TMDB keyword 9716 internally and appears alongside genres in the UI.
 Original language describes the title, not streaming-service audio tracks.
 
+Optional `audio.py` lookups supplement visible English-original cards through
+`GET /api/titles/{media_type}/{movie_id}/audio`. Exact Netflix (8), Prime Video (9),
+and Disney+ (337) base subscriptions map to the external API's service IDs.
+Rental, purchase, add-on, other-country, and unknown audio data cannot cause warnings.
+Every matching subscription edition must report audio and omit English to label a provider.
+Show-level series information is advisory; it does not guarantee uniform episode audio.
+Title identity is checked against both IMDb and typed TMDB IDs.
+
+Fresh cached labels are included in `/api/movies` without waiting behind upstream
+requests. Uncached checks start within 400 pixels of the viewport.
+SQLite settings cache results by country and typed title identity for 24 hours,
+independently of snapshot publication. Requests are serialized and paced; failures
+pause upstream requests for one hour. Expired warnings are not served on failure.
+The optional `STREAMING_AVAILABILITY_API_KEY` stays server-side. Audio information
+never changes inclusion, ranking, pagination, or TMDB provider availability.
+
 SQLite stores JSON settings and catalog payloads. Catalog and history tables use
 composite media-type/ID keys because film and series numeric IDs can overlap.
 Legacy film-only databases migrate automatically. Watched and hidden history is

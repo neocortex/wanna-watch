@@ -137,6 +137,9 @@ pink W with a cyan extrusion on night navy. It is served publicly so the sign-in
 
 **Warm rating gold (`rating`)** distinguishes genuine IMDb ratings from surrounding metadata.
 
+Small warm-gold “English may be unavailable” labels sit directly beside affected
+provider names. They use plain text without glow and wrap within narrow cards.
+
 ### Neutral
 
 **Night navy (`bg`)** is the canvas. **Panel navy (`panel`)** supports dialogs and missing posters.

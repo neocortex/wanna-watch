@@ -57,6 +57,21 @@ a password. Hosted login stays signed in for 30 days per browser; use Sign out t
 end a session. Changing the password invalidates all sessions. Native iOS packaging
 is not implemented.
 
+## Optional audio information
+
+Set `STREAMING_AVAILABILITY_API_KEY` in `.env` (or your Railway service variables)
+using a key from [Movie of the Night](https://developers.movieofthenight.com/).
+The key stays on the server and is read without restarting locally.
+English-original cards can show **English may be unavailable** beside Netflix,
+Prime Video, or Disney+ when every reported German subscription offer omits English.
+Unknown audio or missing offers remain unlabeled; no label does not guarantee English.
+Series information is at show level and may vary by episode.
+
+Fresh cached labels arrive with the cards. Lookups start just before cards scroll
+into view, independently of catalog loading, and are cached
+for 24 hours in SQLite. They consume your API quota; failures pause new lookups for
+one hour without affecting browsing. Catalog refresh is not needed to enable labels.
+
 ## Documentation
 
 - [Usage and filters](docs/usage.md)

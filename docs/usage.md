@@ -58,6 +58,15 @@ Stop the server before copying the data directory for a backup. Do not delete th
 SQLite database when clearing generated test output. After upgrading an older
 catalog, refresh it to populate newly supported metadata and series.
 
+## Subscription audio
+
+With the optional Streaming Availability API key configured, English-original titles
+may show **English may be unavailable** beside a provider. This means its reported
+German subscription audio omits English. Check the service before playing; series
+audio can differ by episode. Missing data produces no label, so an unlabeled provider
+does not guarantee English audio. Netflix, Prime Video, and Disney+ base subscriptions
+are supported; rental and channel audio are not applied to them.
+
 ## Appearance and accessibility
 
 The interface uses an 80s neon video-store design, with a decorative storefront, fictional poster art,

@@ -24,6 +24,10 @@ Google-style docstrings, 119-character Python lines, and modules under 500 lines
 - Stand-up uses TMDB keyword 9716 internally; show it alongside genres in the UI.
   Do not infer it from titles or exclude all Comedy.
 - Original language is film metadata, not provider dubbing or subtitle availability.
+- Optional audio warnings use Streaming Availability API via a server-only
+  `STREAMING_AVAILABILITY_API_KEY`. Match country, typed title identity, and exact
+  base subscription. Missing audio is unknown; never infer warnings from rental
+  offers or use supplementary audio to change catalog inclusion/ranking.
 
 ## Checks
 

@@ -9,6 +9,7 @@
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
   <link rel="preload" href="/static/fonts/barlow-4.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/audio.js" defer></script>
   <script src="/static/app.js" defer></script>
 </head>
 <body>
@@ -73,7 +74,7 @@
         <div id="empty" class="empty" hidden><span class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7z"/></svg></span><h2>Your next great watch is out there.</h2><p id="empty-text">Choose your subscriptions to get started.</p></div>
         <button id="load-more" class="button load-more" hidden>Show more titles</button>
       </section>
-      <details id="coverage" class="coverage" hidden><summary>About this catalog</summary><p id="coverage-text"></p><p>Availability is supplied by JustWatch through TMDB. Offers can change; confirm the film is included in your subscription before playing. German availability does not guarantee German audio or subtitles. Series offers may cover only some seasons; check the service. Watched marks the whole series.</p></details>
+      <details id="coverage" class="coverage" hidden><summary>About this catalog</summary><p id="coverage-text"></p><p>Availability is supplied by JustWatch through TMDB. Offers can change; confirm the film is included in your subscription before playing. German availability does not guarantee German audio or subtitles. “English may be unavailable” means reported subscription audio omits English; no label does not guarantee English audio. Audio information by <a href="https://www.movieofthenight.com/about/api/" target="_blank" rel="noopener">Movie of the Night</a>. Series offers may cover only some seasons; check the service. Watched marks the whole series.</p></details>
     </main>
     <footer><a class="footer-brand" href="/">wanna watch.</a><p>Availability by <a href="https://www.justwatch.com/de" target="_blank" rel="noopener">JustWatch</a> · Film data by <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a> · Ratings by <a href="https://www.imdb.com" target="_blank" rel="noopener">IMDb</a></p><small>This product uses the TMDB API but is not endorsed or certified by TMDB.</small><form action="/logout" method="post"><button type="submit">Sign out</button></form></footer>
   </div>

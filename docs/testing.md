@@ -6,6 +6,7 @@ Run from the project root after `uv sync`:
 uv run ruff check .
 uv run ruff format --check .
 node --check src/wanna_watch/static/app.js
+node --check src/wanna_watch/static/audio.js
 uv run playwright install chromium
 uv run pytest
 ```
@@ -21,6 +22,14 @@ Unit boundary inputs are isolated test data. No mock upstream API or production
 demo catalog is used. Populated browser tests copy the actual saved catalog and
 reset only the copy's preferences/history. The personal database stays untouched.
 Screenshots are generated in the ignored `test-results/` directory.
+
+Audio unit tests cover unknown data, multiple editions, and subscription-only
+matching. HTTP tests exercise a real SQLite cache and typed title identities.
+`tests/test_audio_e2e.py` requires a real English-original catalog title with a
+fresh cached warning: browse such a title with the optional audio key configured
+first. It uses that actual evidence in an isolated store, blocks new upstream
+lookups, and checks the provider label at phone and desktop widths. It skips if
+no suitable evidence is available; it does not fabricate audio offers.
 
 Tests requiring a saved catalog, IMDb download, or TMDB credential skip when those
 inputs are missing. For a complete run without skips, configure `.env` and finish

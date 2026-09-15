@@ -15,6 +15,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+from wanna_watch.audio import AudioWarnings
 from wanna_watch.auth import install_auth
 from wanna_watch.catalog import refresh_catalog
 from wanna_watch.storage import Store
@@ -68,6 +69,7 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
         raise RuntimeError("Set WANNA_WATCH_PASSWORD before starting on Railway.")
     directory = data_dir or Path(os.getenv("WANNA_WATCH_DATA_DIR", "data"))
     store = Store(directory / "wanna-watch.sqlite3")
+    audio = AudioWarnings(store)
     saved = store.get("preferences", {})
     if saved.get("media_type") == "all":
         store.set("preferences", {**saved, "media_type": "movie"})
@@ -167,7 +169,18 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
         """Paginate only after filtering and IMDb sorting the complete stored catalog."""
         prefs = Preferences(**store.get("preferences", {"provider_ids": []})).model_dump()
         result = store.movies(providers=prefs.pop("provider_ids"), view=view, **prefs)
-        return {"movies": result[offset : offset + limit], "total": len(result)}
+        page = result[offset : offset + limit]
+        for movie in page:
+            movie["audio_warning_provider_ids"] = audio.cached(movie)
+        return {"movies": page, "total": len(result)}
+
+    @app.get("/api/titles/{media_type}/{movie_id}/audio")
+    def title_audio(media_type: Literal["movie", "tv"], movie_id: int) -> dict:
+        """Return optional provider warnings independently of catalog loading."""
+        movie = store.title(media_type, movie_id)
+        if movie is None:
+            raise HTTPException(404, "This title is not in the catalog.")
+        return {"provider_ids": audio.providers(movie)}
 
     @app.put("/api/movies/{movie_id}/state")
     def state(movie_id: int, body: WatchState) -> dict:

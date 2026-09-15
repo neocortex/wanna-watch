@@ -23,6 +23,10 @@ for remote access. Cross-site writes are rejected. To rotate the password, updat
 `WANNA_WATCH_PASSWORD` and redeploy; existing sessions will be invalidated.
 This remains a single shared personal account, with no per-user histories.
 
+For supplementary audio labels, also set `STREAMING_AVAILABILITY_API_KEY` as a
+Railway service variable. The local `.env` is not deployed. This optional key
+enables cached audio checks as cards come into view; see the README for coverage.
+
 A fresh volume starts with an empty catalog. Select subscriptions and refresh after
 setup; collection can take tens of minutes. A local database is not copied into the
 image. Back up the volume before deleting the service or volume, and avoid deploying

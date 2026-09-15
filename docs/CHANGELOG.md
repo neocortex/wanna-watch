@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Render cached audio warnings with the initial cards and prefetch checks near the viewport.
+
+- Add optional provider-level “English may be unavailable” labels using cached
+  Streaming Availability API subscription audio data for English-original titles.
+
 - Add a pink-and-cyan W favicon on navy to the catalog and sign-in pages.
 
 - Anchor the diagonal heading underline below the punctuation and space it clear of the refresh action on all screens.

@@ -164,6 +164,22 @@ class Store:
             key=lambda m: (-m["imdb_rating"], -m["imdb_votes"], m["title"].casefold(), m["media_type"], m["id"]),
         )
 
+    def title(self, media_type: str, movie_id: int) -> dict[str, Any] | None:
+        """Read one catalog title without applying personal filters.
+
+        Args:
+            media_type: Movie or TV identity namespace.
+            movie_id: TMDB identifier.
+
+        Returns:
+            Stored title, or None when it is absent.
+        """
+        with self.connect() as db:
+            row = db.execute(
+                "SELECT payload FROM movies WHERE media_type = ? AND id = ?", (media_type, movie_id)
+            ).fetchone()
+        return {**json.loads(row[0]), "media_type": media_type} if row else None
+
     def set_state(self, movie_id: int, state: str, media_type: str = "movie") -> None:
         """Mark a known title watched or hidden, or restore it to unseen.
 
