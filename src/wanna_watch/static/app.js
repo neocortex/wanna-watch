@@ -11,9 +11,6 @@ let movieRequest = 0;
 let statusRequest = 0;
 let pendingPreferences = 0;
 let preferenceQueue = Promise.resolve();
-let filterTimer;
-let filterRevision = 0;
-let filtersDirty = false;
 const languageNames = new Intl.DisplayNames(['en'], { type: 'language' });
 
 async function api(path, options = {}) {
@@ -80,7 +77,7 @@ async function loadStatus() {
   $('#edit-services').disabled = s.running;
   $('#min-votes').disabled = s.running;
   $('#film-filters').disabled = s.running;
-  if (!pendingPreferences && !filtersDirty && !filterTimer) {
+  if (!pendingPreferences && !$('#filters-dialog').open) {
     if (JSON.stringify(previous?.preferences) !== JSON.stringify(s.preferences)
         || JSON.stringify(previous?.genres) !== JSON.stringify(s.genres)) renderFilters();
     $('#min-votes').value = String(s.preferences.min_votes);
@@ -93,7 +90,11 @@ async function loadStatus() {
   else if (!s.snapshot) notice.textContent = 'Ready to build your first catalog. Refreshing may take several minutes.';
   else if (s.needs_refresh) {
     notice.classList.add('stale');
-    notice.textContent = 'Refresh needed: this catalog is older than 24 hours or does not cover your selected services and title types.';
+    notice.textContent = s.preferences.provider_ids.some(id => !s.snapshot.provider_ids.includes(id))
+      ? 'Refresh to include your added subscriptions.'
+      : s.preferences.media_type === 'tv' && !(s.snapshot.media_types || []).includes('tv')
+        ? 'Refresh to include series in your catalog.'
+        : 'Catalog is older than 24 hours. Refresh for current availability.';
   } else {
     notice.classList.add('fresh');
     notice.textContent = `Updated ${new Date(s.snapshot.completed_at).toLocaleString()}`;
@@ -105,6 +106,7 @@ async function loadStatus() {
     $('#coverage-text').textContent = `${c.discovered.toLocaleString()} titles discovered across ${c.provider_ids.length} subscriptions; ${c.ranked.toLocaleString()} matched to IMDb and a selected German subscription offer. ${c.without_imdb_rating.toLocaleString()} omitted without an IMDb rating; ${c.without_subscription_offer.toLocaleString()} omitted without a matching subscription offer. All discovery pages were collected before ranking. IMDb source updated: ${c.ratings_modified}. Availability collection started: ${new Date(c.started_at).toLocaleString()}.`;
   }
   renderSelected();
+  updateFilterControls();
   if (previous?.running && !s.running) await loadMovies();
 }
 
@@ -121,13 +123,12 @@ function renderSelected() {
   }
 }
 
-function renderFilters() {
-  const prefs = currentStatus.preferences;
+function renderFilters(prefs = currentStatus.preferences) {
   $('#media-type').value = prefs.media_type === 'tv' ? 'tv' : 'movie';
   renderMediaTabs();
   $('#language').value = prefs.language || 'all';
   renderYearOptions(prefs.after_year);
-  $('#imdb-rating').value = prefs.imdb_rating ?? '';
+  renderRatingOptions(prefs.imdb_rating);
   $('#genre-options').replaceChildren();
   const genres = [...(currentStatus.genres || []), { id: 'standup', name: 'Stand-up comedy' }]
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -140,8 +141,16 @@ function renderFilters() {
     label.append(input, document.createTextNode(genre.name));
     $('#genre-options').append(label);
   }
-  const hidden = (prefs.excluded_genres || []).length + Number(prefs.exclude_standup || false);
-  $('#genre-summary').textContent = `Exclude genres${hidden ? ` · ${hidden} excluded` : ''}`;
+}
+
+/** Populate rating ceilings from 10.0 to 6.0; no ceiling displays as 10.0. */
+function renderRatingOptions(selectedRating) {
+  const select = $('#imdb-rating');
+  select.replaceChildren();
+  for (let tenths = 100; tenths >= 60; tenths--) {
+    select.append(new Option((tenths / 10).toFixed(1), String(tenths / 10)));
+  }
+  select.value = String(Math.max(6, selectedRating ?? 10));
 }
 
 /** Populate the exclusive release-year filter with complete, readable choices. */
@@ -215,7 +224,6 @@ function renderMovie(movie, rank) {
 }
 
 async function loadMovies(append = false) {
-  if (filtersDirty || filterTimer) return;
   if (append && loading) return;
   loading = true;
   const request = ++movieRequest;
@@ -223,7 +231,7 @@ async function loadMovies(append = false) {
   try {
     const offset = append ? shown : 0;
     const data = await api(`/api/movies?view=${requestedView}&offset=${offset}&limit=40`);
-    if (request !== movieRequest || requestedView !== view || filtersDirty || filterTimer) return;
+    if (request !== movieRequest || requestedView !== view) return;
     if (!append) { audioObserver.disconnect(); $('#movies').replaceChildren(); shown = 0; }
     for (const movie of data.movies) {
       const card = renderMovie(movie, ++shown);
@@ -296,7 +304,6 @@ $('#provider-search').addEventListener('input', (event) => {
 
 function savePreferences(changes) {
   clearError();
-  const revision = filterRevision;
   statusRequest++;
   pendingPreferences++;
   // Serialize writes so a slow response cannot overwrite a more recent selection.
@@ -305,10 +312,12 @@ function savePreferences(changes) {
     currentStatus.preferences = await api('/api/preferences', {
       method: 'PUT', body: JSON.stringify(preferences),
     });
-    if (revision === filterRevision) filtersDirty = false;
-    if (pendingPreferences === 1 && !filterTimer) {
+    if (pendingPreferences === 1) {
+      const scrollPosition = window.scrollY;
       await loadStatus();
       await loadMovies();
+      // Keep browser scroll anchoring from shifting the browsing position when results change.
+      window.scrollTo({ top: scrollPosition, behavior: 'instant' });
     }
   }).finally(() => { pendingPreferences--; });
   preferenceQueue = save.catch(() => {});
@@ -318,30 +327,13 @@ function savePreferences(changes) {
 function readFilters() {
   return {
     media_type: $('#media-type').value,
+    min_votes: Number($('#min-votes').value),
     excluded_genres: [...document.querySelectorAll('#genre-options input:checked:not(#exclude-standup)')].map(input => Number(input.value)),
     exclude_standup: $('#exclude-standup').checked,
     language: $('#language').value,
     after_year: $('#after-year').value === '' ? null : Number($('#after-year').value),
-    imdb_rating: $('#imdb-rating').value === '' ? null : Number($('#imdb-rating').value),
+    imdb_rating: $('#imdb-rating').value === '10' ? null : Number($('#imdb-rating').value),
   };
-}
-
-function filterEdited() {
-  filtersDirty = true;
-  filterRevision++;
-  statusRequest++;
-  movieRequest++;
-  loading = false;
-}
-
-function applyFilters() {
-  clearTimeout(filterTimer);
-  filterTimer = undefined;
-  if (!$('#filters-form').checkValidity()) return;
-  const filters = readFilters();
-  const hidden = filters.excluded_genres.length + Number(filters.exclude_standup);
-  $('#genre-summary').textContent = `Exclude genres${hidden ? ` · ${hidden} excluded` : ''}`;
-  savePreferences(filters).catch(showError);
 }
 
 function renderMediaTabs() {
@@ -354,51 +346,20 @@ document.querySelectorAll('button[data-media-type]').forEach(button => button.ad
   if ($('#media-type').value === button.dataset.mediaType) return;
   $('#media-type').value = button.dataset.mediaType;
   renderMediaTabs();
-  filterEdited();
-  applyFilters();
+  savePreferences({ media_type: $('#media-type').value }).catch(showError);
 }));
-
-$('#filters-form').addEventListener('input', event => {
-  filterEdited();
-  clearTimeout(filterTimer);
-  filterTimer = undefined;
-  if (event.target.type === 'number') filterTimer = setTimeout(applyFilters, 350);
-  else applyFilters();
-});
-$('#filters-form').addEventListener('submit', event => {
-  event.preventDefault();
-  applyFilters();
-});
-
-$('#reset-filters').addEventListener('click', () => {
-  clearTimeout(filterTimer);
-  filterTimer = undefined;
-  $('#language').value = 'en';
-  $('#after-year').value = '';
-  $('#imdb-rating').value = '';
-  document.querySelectorAll('#genre-options input').forEach(input => {
-    input.checked = input.id === 'exclude-standup' || ['16', '99'].includes(input.value);
-  });
-  filterEdited();
-  applyFilters();
-});
 
 $('#services-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   const ids = [...document.querySelectorAll('#provider-options input:checked')].map(input => Number(input.value));
   $('#save-services').disabled = true;
   try {
-    await savePreferences({ provider_ids: ids });
+    await savePreferences({ provider_ids: ids, service_ids: currentStatus.preferences.service_ids?.filter(id => ids.includes(id)) ?? null });
     renderSelected();
     $('#services-dialog').close();
+    renderServiceOptions();
   } catch (error) { $('#provider-message').textContent = error.message; }
   finally { $('#save-services').disabled = false; }
-});
-
-$('#min-votes').addEventListener('change', async (event) => {
-  filterEdited();
-  try { await savePreferences({ min_votes: Number(event.target.value) }); }
-  catch (error) { showError(error); await loadStatus(); }
 });
 
 $('#refresh').addEventListener('click', async () => {
@@ -427,4 +388,4 @@ async function start() {
   } catch (error) { showError(error); }
   setInterval(() => { if (!pendingPreferences) loadStatus().catch(showError); }, 2000);
 }
-start();
+// The filter controls are initialized by filters.js before startup.

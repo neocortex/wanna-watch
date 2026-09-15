@@ -38,6 +38,7 @@ class Preferences(BaseModel):
     """Validate the selected subscriptions and IMDb vote threshold."""
 
     provider_ids: list[int] = Field(max_length=30)
+    service_ids: list[int] | None = Field(default=None, max_length=30)
     media_type: Literal["movie", "tv"] = "movie"
     min_votes: int = Field(default=5000, ge=0, le=10_000_000)
     excluded_genres: list[int] = Field(
@@ -148,6 +149,8 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
         known = {p["provider_id"] for p in store.get("providers", [])}
         if not set(body.provider_ids).issubset(known):
             raise HTTPException(422, "Choose subscriptions from the German provider list.")
+        if body.service_ids is not None and not set(body.service_ids).issubset(body.provider_ids):
+            raise HTTPException(422, "Choose filter services from your saved subscriptions.")
         known_genres = {16, 99} | {g["id"] for g in store.get("genres", [])}
         if not set(body.excluded_genres).issubset(known_genres):
             raise HTTPException(422, "Choose genres from the TMDB genre list.")
@@ -168,7 +171,10 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     ) -> dict:
         """Paginate only after filtering and IMDb sorting the complete stored catalog."""
         prefs = Preferences(**store.get("preferences", {"provider_ids": []})).model_dump()
-        result = store.movies(providers=prefs.pop("provider_ids"), view=view, **prefs)
+        subscriptions = prefs.pop("provider_ids")
+        services = prefs.pop("service_ids")
+        selected = subscriptions if services is None else sorted(set(services).intersection(subscriptions))
+        result = store.movies(providers=selected, view=view, **prefs)
         page = result[offset : offset + limit]
         for movie in page:
             movie["audio_warning_provider_ids"] = audio.cached(movie)

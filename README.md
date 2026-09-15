@@ -4,7 +4,8 @@ Find unseen films and series included in your German subscriptions, ordered by *
 rating. A personal web app that works in desktop and phone browsers.
 
 The neon video-store interface uses locally hosted fonts, a matching W favicon, decorative artwork, and a structured
-filter console with keyboard-accessible controls and support for reduced motion.
+sticky browsing bar with keyboard-accessible filter panels and support for reduced motion.
+Filter by any subset of your saved subscriptions without changing the services you pay for.
 
 The app uses real TMDB/JustWatch availability and IMDb's official ratings
 dataset. It starts empty; no demonstration titles or invented availability are

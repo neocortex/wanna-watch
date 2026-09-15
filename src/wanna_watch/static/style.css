@@ -144,7 +144,7 @@ h2 { font: 600 18px/1.25 'Barlow', sans-serif; margin: 0; }
 #film-filters { display: grid; grid-template-columns: auto 1fr; gap: 0 24px; align-items: center; border: 0; padding: 18px 0 0; margin: 0; min-width: 0; }
 .film-filter-controls { display: grid; grid-template-columns: minmax(150px, .85fr) minmax(190px, 1.1fr) minmax(145px, .75fr) minmax(165px, .85fr) auto; align-items: end; gap: 14px; }
 .film-filter-controls label { display: grid; gap: 7px; font-size: 12px; font-weight: 500; color: #dce7f8; min-width: 0; }
-select, #imdb-rating {
+select {
   width: 100%;
   min-width: 0;
   padding: 10px 36px 10px 12px;
@@ -156,7 +156,6 @@ select, #imdb-rating {
   min-height: 46px;
 }
 select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #9fb8d5 50%), linear-gradient(135deg, #9fb8d5 50%, transparent 50%), linear-gradient(180deg, #12243a, #0a1728); background-position: calc(100% - 16px) 20px, calc(100% - 11px) 20px, 0 0; background-size: 5px 5px, 5px 5px, 100% 100%; background-repeat: no-repeat; }
-#imdb-rating { padding-right: 12px; }
 select:hover, input:hover { border-color: #88729b; background-color: #10243a; }
 select option { background: var(--bg); }
 .filter-actions { display: grid; justify-items: end; align-content: end; min-width: 110px; }
@@ -287,7 +286,7 @@ input[type=search] { width: 100%; border: 1px solid #544660; border-radius: 3px;
   #edit-services { min-height: 44px; font-size: 12px; }
   .film-filter-controls { grid-template-columns: 1fr 1fr; gap: 13px 12px; }
   .film-filter-controls label { font-size: 12px; }
-  select, #imdb-rating { font-size: 16px; min-height: 46px; }
+  select { font-size: 16px; min-height: 46px; }
   .filter-actions { justify-content: space-between; }
   #reset-filters { font-size: 12px; }
   .subscription-row { gap: 9px; }

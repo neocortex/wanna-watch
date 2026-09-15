@@ -40,8 +40,10 @@ def verify(directory: Path, limit: int = 10) -> dict:
         raise ValueError("Refresh the catalog to cover all selected subscriptions before verifying.")
     if prefs["media_type"] != "movie" and "tv" not in snapshot.get("media_types", []):
         raise ValueError("Refresh the catalog to collect series before verifying this selection.")
+    services = prefs.pop("service_ids")
+    selected = set(prefs["provider_ids"] if services is None else services).intersection(prefs["provider_ids"])
     filters = {key: value for key, value in prefs.items() if key != "provider_ids"}
-    movies = store.movies(providers=prefs["provider_ids"], **filters)
+    movies = store.movies(providers=sorted(selected), **filters)
     if not movies:
         raise ValueError("No unseen films match the current filters.")
     source = TMDB(read_token())
@@ -54,7 +56,6 @@ def verify(directory: Path, limit: int = 10) -> dict:
                 "AND m.media_type = h.media_type"
             ).fetchall()
         eligible = []
-        selected = set(prefs["provider_ids"])
         for payload, state in rows:
             saved = json.loads(payload)
             saved.setdefault("media_type", "movie")

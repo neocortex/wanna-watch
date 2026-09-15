@@ -42,3 +42,10 @@ subscriptions differ from the illustration. Font measurement could not isolate c
 automated build-phase gate has not passed. Final manual design review returned SHIP after SVG icon corrections;
 do not claim pixel exactness or treat this record as an automated approval. Shipped tokens are in
 docs/DESIGN.md and .impeccable/design.json.
+
+
+FILTER INTERACTION UPDATE: The cover retains its neon identity. Refresh now sits beside catalog status.
+A sticky Films / Series and Filters bar stays accessible above results, without a filter count or summary row.
+Subscriptions sits immediately left of Refresh catalog. The service subset lives inside the Filters panel.
+Desktop side panels become mobile bottom sheets; Apply commits drafts without forcing a scroll,
+Cancel/Escape preserves selection and scroll. Reset is inside Filters only and restores the draft, including minimum votes and service selection.

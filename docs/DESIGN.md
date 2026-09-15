@@ -168,24 +168,27 @@ Synopses allow 70ch; catalog coverage allows 75ch.
 ## Layout
 
 The centered shell is at most 1515px wide with 42px horizontal padding. The header is 104px high.
-The masthead stacks the display title and compact refresh action so the storefront poster stays visible.
-The desktop filter console places segmented media navigation beside four purpose-sized field columns and
-an action column, with a vertical divider and expandable genres beneath.
+The masthead preserves the illuminated title and storefront. Refresh is a secondary action beside
+catalog status, with Subscriptions immediately to the left of Refresh catalog. A compact sticky bar
+exposes Films / Series and Filters without a count or summary row. Services lives inside Filters and
+selects a subset of paid subscriptions; Subscriptions edits collection scope separately. Filters use a 480px desktop side panel and a bottom sheet capped at 90dvh
+on phones, with explicit Apply and Cancel. Services and genres use consistent checkbox rows; genre checks exclude.
+Labels use sentence-case Barlow. Reset lives only inside Filters and restores the draft defaults, including votes and services.
 Catalog shelves use four equal columns with 24px horizontal and 38px vertical gaps.
 Cards align to the top and retain their natural metadata height.
 
-At 1100px and below, shell padding becomes 28px, subscriptions wrap, fields use four equal columns,
-and shelves use three columns. At 850px, media navigation sits above the filter controls. At 700px,
-padding becomes 18px,
-filters use two columns, poster shelves use two columns with 12px horizontal and 19px vertical gaps,
-and card padding becomes 8px. At 360px, shell padding becomes 12px.
+At 1100px and below, shell padding becomes 28px and shelves use three columns. At 700px,
+padding becomes 18px, catalog actions sit together below status text, and shelves
+use two columns with 12px horizontal and 19px vertical gaps. Filter fields use two columns inside
+the panel, stacking at 360px to preserve input width. Panel headings and actions stay visible while
+scrolling. At 360px, shell padding becomes 12px.
 The provider picker is two columns on desktop and one on phones; its list scrolls within 38dvh.
 The dialog is at most 570px wide, remains 12px from viewport edges, and is capped at 85dvh.
 
 ## Elevation & Depth
 
 Depth comes from tonal navy gradients, thin internal dividers, neutral elevation and localized neon glow.
-The subscription and filter console uses backdrop blur specifically to keep controls readable where the
+The sticky browsing bar uses backdrop blur specifically to keep controls readable where the
 decorative plate meets the catalog. The storefront is a
 noninteractive background behind the shell, masked to fade at the bottom; it is not a catalog image.
 The desktop plate occupies a 500px-high region with artwork sized to 500px high and shifted up 18px.
@@ -242,7 +245,8 @@ and uses opacity for refresh progress.
 
 Navy gradient fields have blue outlines, compact padding, visible labels and consistent 46px heights.
 Released after is a native year select ranging from the previous calendar year to 1900, while preserving
-an existing saved value outside that range. Phone numeric fields and selects use 16px text. Checkbox accents
+an existing saved value outside that range. Maximum IMDb rating uses the same native select styling, with 10.0 down to 6.0 in 0.1 steps
+and a default of 10.0. Phone selects use 16px text. Checkbox accents
 are cyan. The services search
 uses the darker canvas background. Errors use a plum panel with pale pink text and a visible border;
 stale catalog notices use warm amber text. These states retain textual explanations.

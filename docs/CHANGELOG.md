@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Use a maximum IMDb rating dropdown from 10.0 to 6.0 in 0.1 steps, defaulting to 10.0.
+
+- Remove service and genre helper sentences and the excluded-genres count from Filters.
+
+- Rename the unseen catalog tab to Discover.
+
+- Keep the browsing position when applying filters instead of jumping to the result heading.
+
+- Separate saved subscriptions from service filtering; preserve catalog coverage when narrowing services.
+- Add sticky browsing controls, a combined filter panel on desktop and mobile sheets
+  with Apply/Cancel and an in-panel reset. Place Subscriptions beside Refresh catalog and specific catalog status messages.
+- Reset all browsing filters, including minimum votes and selected services, to their documented defaults.
+
 - Render cached audio warnings with the initial cards and prefetch checks near the viewport.
 
 - Add optional provider-level “English may be unavailable” labels using cached

@@ -76,6 +76,7 @@ async def test_saved_metadata_filters_apply_before_pagination(tmp_path: Path, fi
     prefs = {
         "provider_ids": [8],
         "media_type": "movie",
+        "service_ids": None,
         "min_votes": 0,
         "excluded_genres": [99],
         "exclude_standup": True,

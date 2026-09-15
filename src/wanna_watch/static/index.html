@@ -10,7 +10,9 @@
   <link rel="preload" href="/static/fonts/barlow-4.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="/static/style.css">
   <script src="/static/audio.js" defer></script>
+  <link rel="stylesheet" href="/static/filters.css">
   <script src="/static/app.js" defer></script>
+  <script src="/static/filters.js" defer></script>
 </head>
 <body>
   <div class="shell">
@@ -22,26 +24,40 @@
     <main>
       <section class="intro">
         <div class="intro-copy"><h1 data-text="Tonight, sorted.">Tonight, sorted.</h1></div>
-        <button id="refresh" class="button primary" disabled><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M19 11a7 7 0 0 0-12-5L4 9m16 6-3 3A7 7 0 0 1 5 13"/></svg><span id="refresh-label">Refresh catalog</span></button>
       </section>
-      <section class="preferences" aria-label="Your subscriptions and filters">
-        <div class="subscription-row">
-          <h2>Your subscriptions</h2>
-          <div id="selected-services" class="chips"><span class="muted">Choose the subscriptions you pay for.</span></div>
-          <button id="edit-services" class="button"> <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Choose services</button>
+      <div class="catalog-status">
+        <div id="notice" class="notice" role="status" aria-live="polite"></div>
+        <div class="catalog-actions">
+          <button id="edit-services" class="button" type="button" aria-haspopup="dialog">Subscriptions</button>
+        <button id="refresh" class="button" disabled><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M19 11a7 7 0 0 0-12-5L4 9m16 6-3 3A7 7 0 0 1 5 13"/></svg><span id="refresh-label">Refresh catalog</span></button>
         </div>
-        <form id="filters-form">
-          <fieldset id="film-filters">
-            <legend class="sr-only">Filter films</legend>
-            <div class="media-filter">
-              <span class="control-label">Browse</span>
-              <nav class="tabs media-tabs" aria-label="Choose list">
-                <button type="button" data-media-type="movie" aria-pressed="true">Films</button>
-                <button type="button" data-media-type="tv" aria-pressed="false">Series</button>
-              </nav>
-            </div>
-            <input id="media-type" type="hidden" value="movie">
-            <div class="film-filter-controls">
+      </div>
+      <section class="preferences" aria-label="Browse catalog">
+        <div class="browse-bar">
+          <nav class="tabs media-tabs" aria-label="Choose list">
+            <button type="button" data-media-type="movie" aria-pressed="true">Films</button>
+            <button type="button" data-media-type="tv" aria-pressed="false">Series</button>
+          </nav>
+          <input id="media-type" type="hidden" value="movie">
+          <button id="open-filters" class="button" aria-haspopup="dialog">Filters</button>
+        </div>
+      </section>
+      <div id="error" class="error" role="alert" hidden></div>
+      <section class="catalog" aria-label="Ranked films and series">
+        <div class="catalog-heading"><nav aria-label="Watch status" class="tabs"><button data-view="unseen" aria-pressed="true">Discover</button><button data-view="watched" aria-pressed="false">Watched</button><button data-view="hidden" aria-pressed="false">Hidden</button></nav><span id="count" class="muted"></span></div>
+        <div id="movies" class="movie-grid"></div>
+        <div id="empty" class="empty" hidden><span class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7z"/></svg></span><h2>Your next great watch is out there.</h2><p id="empty-text">Choose your subscriptions to get started.</p></div>
+        <button id="load-more" class="button load-more" hidden>Show more titles</button>
+      </section>
+      <details id="coverage" class="coverage" hidden><summary>About this catalog</summary><p id="coverage-text"></p><p>Availability is supplied by JustWatch through TMDB. Offers can change; confirm the film is included in your subscription before playing. German availability does not guarantee German audio or subtitles. “English may be unavailable” means reported subscription audio omits English; no label does not guarantee English audio. Audio information by <a href="https://www.movieofthenight.com/about/api/" target="_blank" rel="noopener">Movie of the Night</a>. Series offers may cover only some seasons; check the service. Watched marks the whole series.</p></details>
+    </main>
+    <footer><a class="footer-brand" href="/">wanna watch.</a><p>Availability by <a href="https://www.justwatch.com/de" target="_blank" rel="noopener">JustWatch</a> · Film data by <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a> · Ratings by <a href="https://www.imdb.com" target="_blank" rel="noopener">IMDb</a></p><small>This product uses the TMDB API but is not endorsed or certified by TMDB.</small><form action="/logout" method="post"><button type="submit">Sign out</button></form></footer>
+  </div>
+  <dialog id="filters-dialog" class="filter-panel" aria-labelledby="filters-title">
+    <form id="filters-form">
+      <div class="dialog-heading"><h2 id="filters-title">Filters</h2><button type="button" class="icon-button" data-close="filters-dialog" aria-label="Close filters"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button></div>
+      <fieldset id="film-filters"><legend class="sr-only">Filter titles</legend>
+        <div class="film-filter-controls">
               <label class="vote-filter" for="min-votes">Minimum IMDb votes
                 <select id="min-votes"><option value="0">Any</option><option value="1000">1,000</option><option value="5000" selected>5,000</option><option value="10000">10,000</option><option value="25000">25,000</option><option value="100000">100,000</option></select>
               </label>
@@ -52,35 +68,27 @@
                 <select id="after-year"><option value="">Any year</option></select>
               </label>
               <label for="imdb-rating">Maximum IMDb rating
-                <input id="imdb-rating" type="number" min="1" max="10" step="0.1" placeholder="Any rating" inputmode="decimal">
+                <select id="imdb-rating"><option value="10">10.0</option></select>
               </label>
-              <div class="filter-actions">
-                <span>Updates instantly</span>
-                <button id="reset-filters" class="text-button" type="button">Reset filters</button>
-              </div>
-            </div>
-            <details class="genre-filter">
-              <summary id="genre-summary">Exclude genres</summary>
-              <div id="genre-options" class="genre-options"></div>
-            </details>
-          </fieldset>
-        </form>
-      </section>
-      <div id="notice" class="notice" role="status" aria-live="polite"></div>
-      <div id="error" class="error" role="alert" hidden></div>
-      <section class="catalog" aria-label="Ranked films and series">
-        <div class="catalog-heading"><nav aria-label="Watch status" class="tabs"><button data-view="unseen" aria-pressed="true">To discover</button><button data-view="watched" aria-pressed="false">Watched</button><button data-view="hidden" aria-pressed="false">Hidden</button></nav><span id="count" class="muted"></span></div>
-        <div id="movies" class="movie-grid"></div>
-        <div id="empty" class="empty" hidden><span class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7z"/></svg></span><h2>Your next great watch is out there.</h2><p id="empty-text">Choose your subscriptions to get started.</p></div>
-        <button id="load-more" class="button load-more" hidden>Show more titles</button>
-      </section>
-      <details id="coverage" class="coverage" hidden><summary>About this catalog</summary><p id="coverage-text"></p><p>Availability is supplied by JustWatch through TMDB. Offers can change; confirm the film is included in your subscription before playing. German availability does not guarantee German audio or subtitles. “English may be unavailable” means reported subscription audio omits English; no label does not guarantee English audio. Audio information by <a href="https://www.movieofthenight.com/about/api/" target="_blank" rel="noopener">Movie of the Night</a>. Series offers may cover only some seasons; check the service. Watched marks the whole series.</p></details>
-    </main>
-    <footer><a class="footer-brand" href="/">wanna watch.</a><p>Availability by <a href="https://www.justwatch.com/de" target="_blank" rel="noopener">JustWatch</a> · Film data by <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a> · Ratings by <a href="https://www.imdb.com" target="_blank" rel="noopener">IMDb</a></p><small>This product uses the TMDB API but is not endorsed or certified by TMDB.</small><form action="/logout" method="post"><button type="submit">Sign out</button></form></footer>
-  </div>
+        </div>
+        <fieldset class="picker-group"><legend>Services</legend>
+          <button id="all-services" type="button" class="text-button">Select all</button>
+          <div id="service-filter-options" class="provider-options"></div>
+        </fieldset>
+        <fieldset class="picker-group"><legend id="genre-summary">Exclude genres</legend>
+          <button id="clear-genres" class="text-button" type="button">Clear exclusions</button>
+          <div id="genre-options" class="genre-options"></div>
+        </fieldset>
+      </fieldset>
+      <p id="filter-error" role="alert" hidden></p>
+      <div class="dialog-footer"><button id="reset-filters" class="text-button" type="button">Reset filters</button><button type="button" class="text-button" data-close="filters-dialog">Cancel</button><button class="button primary" type="submit">Apply filters</button></div>
+    </form>
+  </dialog>
   <dialog id="services-dialog" aria-labelledby="services-title">
     <form id="services-form">
-      <div class="dialog-heading"><h2 id="services-title">Your movie-night lineup.</h2><button id="close-dialog" type="button" class="icon-button" aria-label="Close subscriptions"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button></div>
+      <div class="dialog-heading"><h2 id="services-title">My subscriptions</h2><button id="close-dialog" type="button" class="icon-button" aria-label="Close subscriptions"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button></div>
+      <div id="selected-services" class="chips"></div>
+      <p>Choose the services you pay for. This determines what your catalog collects.</p>
       <label for="provider-search" class="sr-only">Search services</label><input id="provider-search" type="search" placeholder="Find a service…" autocomplete="off">
       <p id="provider-message" role="status"></p>
       <div id="provider-options" class="provider-options"></div>

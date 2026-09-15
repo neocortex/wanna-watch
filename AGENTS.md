@@ -20,6 +20,8 @@ Google-style docstrings, 119-character Python lines, and modules under 500 lines
 - Identify titles by (media_type, TMDB ID); film and series numeric IDs can overlap.
 - Collect and publish movie and TV catalogs together. TV ratings and history refer
   to the whole show; use external_ids.imdb_id and first_air_date for series.
+- Keep saved `provider_ids` (paid subscriptions / collection scope) separate from `service_ids`
+  (browsing subset). Null means all subscriptions; an empty list means no services.
 - Apply genre, original-language, exclusive release-year, and maximum IMDb rating filters before pagination.
 - Stand-up uses TMDB keyword 9716 internally; show it alongside genres in the UI.
   Do not infer it from titles or exclude all Comedy.
